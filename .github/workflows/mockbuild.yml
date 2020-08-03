@@ -19,6 +19,8 @@ jobs:
         dotnet-version: 3.1.301
     - name: 'Run dotnet build'
       shell: bash
+      env:
+        ConnectionStrings__DefaultConnection: secrets.SQL_SERVER_CONNECTION_STRING
       run: |
         pushd ./src/Mock
         dotnet build --configuration Release --output ../../output
