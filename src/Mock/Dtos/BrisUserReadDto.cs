@@ -1,0 +1,16 @@
+
+namespace Mock.Dtos
+{
+  public class BrisUserReadDto
+  {
+    public int Id { get; set; }
+
+    public string FirstName { get; set; }
+
+    public string LastName { get; set; }
+
+    public string LastPaidStudentFee { get; set; }
+
+    public string Ssn { get; set; }
+  }
+}
