@@ -21,9 +21,22 @@ jobs:
       shell: bash
       run: |
         cd ./src/Backend
-        dotnet build --configuration Release --output ./output
+        dotnet build --configuration Release
+    - name: 'Run dotnet publish'
+      shell: bash
+      run: |
+        cd ./src/Backend
+        dotnet publish -o ./output
+    - name: 'test1'
+      shell: bash
+      run: |
+        cd ./src/Backend
+        ls
+    - name: 'test2'
+      shell: bash
+      run: ls
     - name: 'Run Azure webapp deploy action using publish profile credentials'
       uses: azure/webapps-deploy@v2
       with: 
-        app-name: athleticasignup
+        app-name: athleticabackend
         publish-profile: ${{ secrets.AZURE_CREDENTIALS_BACKEND }}
