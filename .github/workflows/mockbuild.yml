@@ -21,10 +21,11 @@ jobs:
       shell: bash
       run: |
         pushd ./src/Mock
-        dotnet build --configuration Release --output ./output
+        dotnet build --configuration Release --output ../../output
         popd
     - name: 'Run Azure webapp deploy action using publish profile credentials'
       uses: azure/webapps-deploy@v2
       with: 
+        package: ./output
         app-name: athleticasignup
         publish-profile: ${{ secrets.AZURE_CREDENTIALS_MOCK }}
