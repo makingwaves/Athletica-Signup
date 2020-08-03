@@ -9,6 +9,7 @@ using AutoMapper;
 using Backend.MockApiDtos;
 using Backend.Models;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace Backend.Data
@@ -17,14 +18,16 @@ namespace Backend.Data
   {
     private static readonly HttpClient client = new HttpClient();
     private readonly IMapper _mapper;
+    private readonly IConfiguration _configuration;
 
-    public ApiRetriever(IMapper mapper)
+    public ApiRetriever(IMapper mapper, IConfiguration configuration)
     {
+      _mapper = mapper;
+      _configuration = configuration;
       if (client.BaseAddress == null)
       {
-        client.BaseAddress = new System.Uri("http://127.0.0.1:5002/api");
+        client.BaseAddress = new System.Uri(_configuration["MockDomain"]);
       }
-      _mapper = mapper;
     }
     public async Task<IEnumerable<User>> GetUsers()
     {

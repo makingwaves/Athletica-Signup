@@ -9,6 +9,7 @@ using Backend.Models;
 using Newtonsoft.Json;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.Extensions.Configuration;
 
 namespace Backend.Data
 {
@@ -17,9 +18,9 @@ namespace Backend.Data
     private readonly ApiRetriever _apiRetriever;
     private readonly IMapper _mapper;
 
-    public BackendRepo(IMapper mapper)
+    public BackendRepo(IMapper mapper, IConfiguration configuration)
     {
-      _apiRetriever = new ApiRetriever(mapper);
+      _apiRetriever = new ApiRetriever(mapper, configuration);
       _mapper = mapper;
     }
 
