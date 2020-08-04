@@ -17,13 +17,15 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.301
-    - name: 'Run dotnet build'
+    - name: dotnet build and publish
       shell: bash
+      env:
+        ConnectionStrings__DefaultConnection: secrets.SQL_SERVER_CONNECTION_STRING
       run: |
-        pushd ./src/Mock
-        dotnet user-secrets set "ConnectionStrings:DefaultConnection" secrets.SQL_SERVER_CONNECTION_STRING
-        dotnet build --configuration Release --output ../../output
-        popd
+        cd ./src/Mock
+        dotnet restore
+        dotnet build --configuration Release
+        dotnet publish -c Release -o ../../output
     - name: 'Run Azure webapp deploy action using publish profile credentials'
       uses: azure/webapps-deploy@v2
       with: 
