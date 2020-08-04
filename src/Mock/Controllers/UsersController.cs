@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Mock.Data;
 using Mock.Dtos;
 using Mock.Models;
@@ -15,10 +16,12 @@ namespace Mock.Controllers
     private readonly IMockRepo _repository;
     private readonly IMapper _mapper;
 
-    public UsersController(IMockRepo repository, IMapper mapper)
+    private readonly IConfiguration _configuration;
+    public UsersController(IMockRepo repository, IMapper mapper, IConfiguration configuration)
     {
       _repository = repository;
       _mapper = mapper;
+      _configuration = configuration;
     }
 
     // GET api/mock/users
@@ -32,6 +35,13 @@ namespace Mock.Controllers
         return NotFound();
       }
       return Ok(_mapper.Map<IEnumerable<UserReadDto>>(userItems));
+    }
+
+    [HttpGet("configuration")]
+    public ActionResult<string> GetConnectionString()
+    {
+      Response.Headers.Add("Access-Control-Allow-Origin", "*");
+      return Ok(_configuration["ConnectionStrings:DefaultConnection"]);
     }
 
     // GET api/mock/users/{id}
