@@ -34,12 +34,8 @@ namespace Mock
     {
       services.AddCors();
 
-      /*services.AddDbContext<MockContext>(opt => opt.UseSqlServer
-        (Configuration["SQLCONNSTR_DefaultConnection"]));*/ // TODO: uncomment
-
       services.AddDbContext<MockContext>(opt => opt.UseSqlServer
-        ($"{Configuration.GetConnectionString("MockConnection")};Password={Configuration["DbPassword"]};"));
-      // TODO: Remove this ^
+        (Configuration["SQLCONNSTR_DefaultConnection"]));
 
       services.AddControllers().AddNewtonsoftJson(s =>
       {

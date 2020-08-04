@@ -29,8 +29,6 @@ namespace Mock.Controllers
     public ActionResult<IEnumerable<UserReadDto>> GetAllUsers()
     {
       Response.Headers.Add("Access-Control-Allow-Origin", "*");
-      // TODO: Remove this
-      return Ok(_configuration["SQLCONNSTR_DefaultConnection"]);
       var userItems = _repository.GetAllUsers();
       if (userItems == null)
       {
