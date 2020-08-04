@@ -106,7 +106,7 @@ namespace Backend.Controllers
 
       User userToCreate = await MapToBrisUser(userCreateDto);
 
-      if (ModelState.ErrorCount > 0)
+      if (ModelState.ErrorCount > 0 || !TryValidateModel(ModelState))
       {
         return ValidationProblem(ModelState);
       }
@@ -128,7 +128,8 @@ namespace Backend.Controllers
       exampleUser.FirstName = "First";
       exampleUser.LastName = "Last";
       exampleUser.PhoneNumber = "12345678";
-      exampleUser.Address = "Street 1, 0123, Oslo";
+      // TODO: Fix the postal code aspect of this
+      exampleUser.Address = "Street 1, 0123";
 
       patchDoc.ApplyTo(exampleUser, ModelState);
       if (!TryValidateModel(exampleUser))
@@ -149,8 +150,16 @@ namespace Backend.Controllers
     private async Task<User> MapToBrisUser(UserCreateDto userCreateDto)
     {
       BrisUser brisUser = await _repository.GetBrisUserBySsn(userCreateDto.Ssn);
-
-      User user = _mapper.Map<User>(userCreateDto);
+      string city = _repository.GetCityByPostalCode(userCreateDto.Address.Split(',')[1].Trim());
+      if (city == null)
+      {
+        ModelState.AddModelError(string.Empty, "Invalid postal code.");
+      }
+      string address = $"{userCreateDto.Address}, {city}";
+      User user = _mapper.Map<User>(userCreateDto, opt =>
+      {
+        opt.AfterMap((src, dest) => dest.Address = address);
+      });
       string bdate = Helper.SsnToBirthDate(userCreateDto.Ssn);
       if (bdate == null)
       {

@@ -24,12 +24,12 @@ namespace Backend.ClientDtos
     public string PhoneNumber { get; set; }
 
     [Required]
-    [RegularExpression(@"[\w\s]+\,\s?\d{4}\,[a-zA-Z\s]+")]
+    [RegularExpression(@"[\w\s]+\,\s?\d{4}")]
     public string Address { get; set; }
 
     [Required]
     [RegularExpression(@"\d{11}")]
-    public string Ssn { get; set; }   
+    public string Ssn { get; set; }
 
   }
 }

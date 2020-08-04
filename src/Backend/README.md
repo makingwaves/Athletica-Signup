@@ -110,11 +110,11 @@ Returns 200 OK along with a User object matching the email address. Example resp
   "firstName": "Ola",
   "lastName": "Nordmann",
   "lastPaidStudentFee": "2020V",
-  "birthDate": "17051814",
+  "birthDate": "17052014",
   "learningInstitutionId": 1,
   "email": "mariusgenser@norway.no",
   "phoneNumber": "54321234",
-  "address": "Norgegata 47, 1905, Norgebyen",
+  "address": "Norgegata 47, 1814, Askim",
   "brisId": 1,
   "ssn": "17051453111"
 }
@@ -146,7 +146,7 @@ Example request body:
   "learningInstitutionId": 1,
   "email": "mariusgenser@norway.no",
   "phoneNumber": "54321234",
-  "address": "Norgegata 47, 1905, Norgebyen",
+  "address": "Norgegata 47, 1905",
   "ssn": "17051453111"
 }
 ```

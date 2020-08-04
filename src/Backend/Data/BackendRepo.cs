@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Configuration;
+using System.Globalization;
 
 namespace Backend.Data
 {
@@ -18,10 +19,13 @@ namespace Backend.Data
     private readonly ApiRetriever _apiRetriever;
     private readonly IMapper _mapper;
 
+    private readonly IDictionary<string, string> _postalCodes;
+
     public BackendRepo(IMapper mapper, IConfiguration configuration)
     {
       _apiRetriever = new ApiRetriever(mapper, configuration);
       _mapper = mapper;
+      _postalCodes = Helper.GetPostalCodes();
     }
 
     public async Task<bool> CreateMembership(Membership membership)
@@ -106,6 +110,14 @@ namespace Backend.Data
     public async Task<bool> PartialUserUpdate(int id, JsonPatchDocument<ClientDtos.UserUpdateDto> patchDoc)
     {
       return await _apiRetriever.PartialUserUpdate(id, patchDoc);
+    }
+
+    public string GetCityByPostalCode(string postalCode)
+    {
+      string city;
+      if (_postalCodes.TryGetValue(postalCode, out city))
+        return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(city.ToLower());
+      return null;
     }
   }
 }

@@ -31,5 +31,7 @@ namespace Backend.Data
     Task<Contract> GetContractById(int id);
 
     Task<BrisUser> GetBrisUserBySsn(string ssn);
+
+    string GetCityByPostalCode(string postalCode);
   }
 }

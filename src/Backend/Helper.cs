@@ -49,5 +49,18 @@ namespace Backend
       }
       return $"{day.ToString().PadLeft(2, '0')}{month.ToString().PadLeft(2, '0')}{year}";
     }
+
+    public static IDictionary<string, string> GetPostalCodes()
+    {
+      string filename = "./Postnummerregister-ansi.txt";
+      IEnumerable<string> lines = System.IO.File.ReadLines(filename);
+      return lines.ToDictionary(
+        line =>
+          line.Split('\t', 5)[0]
+      ,
+        line =>
+        line.Split('\t', 5)[1]
+      );
+    }
   }
 }

@@ -37,6 +37,7 @@ namespace Backend.Models
     public string PhoneNumber { get; set; }
 
     [Required]
+    [RegularExpression(@"[\w\s]+\,\s?\d{4}\,[a-zA-Z\s]+")]
     public string Address { get; set; }
 
     public int? BrisId { get; set; }
