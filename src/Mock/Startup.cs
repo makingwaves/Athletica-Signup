@@ -44,6 +44,9 @@ namespace Mock
 
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
       services.AddScoped<IMockRepo, SqlMockRepo>();
+
+      services.AddApplicationInsightsTelemetry();
+      services.AddMvc();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
