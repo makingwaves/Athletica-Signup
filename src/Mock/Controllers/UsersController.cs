@@ -41,7 +41,7 @@ namespace Mock.Controllers
     public ActionResult<string> GetConnectionString()
     {
       Response.Headers.Add("Access-Control-Allow-Origin", "*");
-      return Ok(_configuration["ConnectionStrings:DefaultConnection"]);
+      return Ok(_configuration["SQLCONNSTR_DefaultConnection"]);
     }
 
     // GET api/mock/users/{id}
