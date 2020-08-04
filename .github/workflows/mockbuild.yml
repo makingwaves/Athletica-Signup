@@ -20,7 +20,7 @@ jobs:
     - name: dotnet build and publish
       shell: bash
       env:
-        ASPNETCORE_ConnectionStrings__DefaultConnection: secrets.SQL_SERVER_CONNECTION_STRING
+        ASPNETCORE_ConnectionStrings__DefaultConnection: ${{ secrets.SQL_SERVER_CONNECTION_STRING }}
       run: |
         cd ./src/Mock
         dotnet restore
