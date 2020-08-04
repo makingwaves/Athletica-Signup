@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
@@ -26,20 +25,13 @@ namespace Mock.Controllers
     [HttpGet]
     public ActionResult<IEnumerable<UserReadDto>> GetAllUsers()
     {
-      try // TODO: Remove try/catch
+      Response.Headers.Add("Access-Control-Allow-Origin", "*");
+      var userItems = _repository.GetAllUsers();
+      if (userItems == null)
       {
-        Response.Headers.Add("Access-Control-Allow-Origin", "*");
-        var userItems = _repository.GetAllUsers();
-        if (userItems == null)
-        {
-          return NotFound();
-        }
-        return Ok(_mapper.Map<IEnumerable<UserReadDto>>(userItems));
+        return NotFound();
       }
-      catch (Exception e)
-      {
-        return BadRequest(e.StackTrace);
-      }
+      return Ok(_mapper.Map<IEnumerable<UserReadDto>>(userItems));
     }
 
     // GET api/mock/users/{id}
