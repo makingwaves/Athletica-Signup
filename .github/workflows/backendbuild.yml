@@ -21,7 +21,9 @@ jobs:
       shell: bash
       run: |
         pushd ./src/Backend
-        dotnet build --configuration Release --output ../../output
+        dotnet restore
+        dotnet build --configuration Release
+        dotnet publish -c Release -o ../../output
         popd
     - name: 'Run Azure webapp deploy action using publish profile credentials'
       uses: azure/webapps-deploy@v2
