@@ -2,7 +2,7 @@
 
 ## Table of contents
 
-- [How to set up](#how-to-set-up)
+- [How to set up](#how-to-set-up-a-local-database-for-testing)
 - [Tables](#tables)
   - [Users](#users)
     - [Endpoints](#endpoints)
@@ -18,7 +18,7 @@
   - [Facilities](#facilities)
     - [Endpoints](#endpoints-5)
 
-## How to set up
+## How to set up a local database for testing
 
 1. Install [Docker](https://www.docker.com/get-started)
 2. Run the following command
@@ -39,11 +39,11 @@ docker ps
 dotnet tool install --global dotnet-ef
 ```
 
-4. To add your password to user secrets, run
+4. To set the connection string when testing locally, add a user secret:
 
 ```bash
 dotnet user-secrets init
-dotnet user-secrets set DbPassword {The very secret password}
+dotnet user-secrets set DefaultConnection "Server=localhost,1500;Initial Catalog=MockDB;User ID=sa;Password={The very secret password}"
 ```
 
 Check that it worked:
