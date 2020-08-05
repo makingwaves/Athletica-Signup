@@ -1,11 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Microsoft.Extensions.Hosting.Internal;
 
 namespace Backend
 {
-  public static class Helper
+  public class Helper
   {
+    private readonly string _webrootpath;
+
+    public Helper(string webrootpath)
+    {
+      _webrootpath = webrootpath;
+    }
+
     public static string SsnToBirthDate(string ssn)
     {
 
@@ -50,24 +59,18 @@ namespace Backend
       return $"{day.ToString().PadLeft(2, '0')}{month.ToString().PadLeft(2, '0')}{year}";
     }
 
-    public static IDictionary<string, string> GetPostalCodes()
+    public IDictionary<string, string> GetPostalCodes()
     {
       string filename = "Postnummerregister-ansi.txt";
-      try // TODO: remove!!!
-      {
-        IEnumerable<string> lines = System.IO.File.ReadLines(filename);
-        return lines.ToDictionary(
-          line =>
-            line.Split('\t', 5)[0]
-        ,
-          line =>
-          line.Split('\t', 5)[1]
-        );
-      }
-      catch (System.IO.FileNotFoundException)
-      {
-        throw new DivideByZeroException("det er jo her jo!!!!");
-      }
+      string filepath = _webrootpath == null ? filename : Path.Combine(_webrootpath, filename);
+      IEnumerable<string> lines = System.IO.File.ReadLines(filepath);
+      return lines.ToDictionary(
+        line =>
+          line.Split('\t', 5)[0]
+      ,
+        line =>
+        line.Split('\t', 5)[1]
+      );
     }
   }
 }
