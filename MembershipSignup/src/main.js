@@ -60,6 +60,7 @@ requireComponent.keys().forEach(fileName => {
 Vue.config.productionTip = false
 
 Axios.defaults.baseURL = process.env.API_ENDPOINT;
+process.env.HOST = 'https://athleticasignup.azurewebsites.net'
 
 Vue.use(Vuex)
 Vue.use(BootstrapVue)
