@@ -182,5 +182,6 @@ Returns 200 OK along with an object containing information about the last paid s
 
 ```http
 GET api/signup/users/postalcode/{postalcode}
+```
 
 Returns a 200 OK along with the city matching the postal code
