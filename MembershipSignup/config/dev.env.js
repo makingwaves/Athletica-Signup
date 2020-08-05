@@ -4,5 +4,5 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  API_ENDPOINT: '"http://localhost:5000/"'
+  API_ENDPOINT: '"https://athleticasignup.azurewebsites.net/"'
 })
