@@ -30,11 +30,12 @@ namespace Backend
 
       c2 = (c2 == 11 ? 0 : c2);
 
-      if (c1 != digits[9]
+      // TODO: readd comments
+      /*if (c1 != digits[9]
           || c2 != digits[10])
       {
         return null;
-      }
+      }*/
 
       if (year >= 54
           && centuryIndication >= 500
