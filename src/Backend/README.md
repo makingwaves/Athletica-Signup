@@ -179,3 +179,8 @@ Returns 200 OK along with an object containing information about the last paid s
   "lastPaidStudentFee": "2020V"
 }
 ```
+
+```http
+GET api/signup/users/postalcode/{postalcode}
+
+Returns a 200 OK along with the city matching the postal code

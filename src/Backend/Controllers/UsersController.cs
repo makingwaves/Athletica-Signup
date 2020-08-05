@@ -22,6 +22,7 @@ namespace Backend.Controllers
       _mapper = mapper;
     }
 
+    // GET api/signup/users/existing?phoneNumber={phoneNumber}
     [HttpGet("existing")]
     public async Task<ActionResult> GetUserByPhoneNumber([FromQuery] string phoneNumber)
     {
@@ -38,6 +39,7 @@ namespace Backend.Controllers
       return Ok(new { exists = true });
     }
 
+    // GET api/signup/users/byemail?email={email}
     [HttpGet("byemail")]
     public async Task<ActionResult<UserReadDto>> GetUserByEmail([FromQuery] string email)
     {
@@ -54,6 +56,7 @@ namespace Backend.Controllers
       return Ok(_mapper.Map<UserReadDto>(user));
     }
 
+    // GET api/signup/users/{id}
     [HttpGet("{id}", Name = "GetUserById")]
     public async Task<ActionResult<UserReadDto>> GetUserById(int id)
     {
@@ -66,6 +69,7 @@ namespace Backend.Controllers
       return Ok(_mapper.Map<UserReadDto>(user));
     }
 
+    // GET api/signup/users/byssn?ssn?={ssn}
     [HttpGet("byssn")]
     public async Task<ActionResult<UserReadDto>> GetUserBySsn([FromQuery] string ssn)
     {
@@ -82,6 +86,7 @@ namespace Backend.Controllers
       return Ok(_mapper.Map<UserReadDto>(user));
     }
 
+    // GET api/signup/users/studentfee?ssn={ssn}
     [HttpGet("studentfee")]
     public async Task<ActionResult> GetUserLastPaidStudentFee([FromQuery] string ssn)
     {
@@ -97,6 +102,7 @@ namespace Backend.Controllers
       return Ok(new { LastPaidStudentFee = brisUser.LastPaidStudentFee });
     }
 
+    // POST api/signup/users
     [HttpPost]
     public async Task<ActionResult<UserReadDto>> CreateUser(UserCreateDto userCreateDto)
     {
@@ -106,7 +112,7 @@ namespace Backend.Controllers
 
       User userToCreate = await MapToBrisUser(userCreateDto);
 
-      if (ModelState.ErrorCount > 0 || !TryValidateModel(ModelState))
+      if (ModelState.ErrorCount > 0)
       {
         return ValidationProblem(ModelState);
       }
@@ -121,6 +127,7 @@ namespace Backend.Controllers
 
     }
 
+    // PATCH api/signup/users/{id}
     [HttpPatch("{id}")]
     public async Task<ActionResult> PartialUserUpdate(int id, JsonPatchDocument<UserUpdateDto> patchDoc)
     {
@@ -128,8 +135,7 @@ namespace Backend.Controllers
       exampleUser.FirstName = "First";
       exampleUser.LastName = "Last";
       exampleUser.PhoneNumber = "12345678";
-      // TODO: Fix the postal code aspect of this
-      exampleUser.Address = "Street 1, 0123";
+      exampleUser.Address = "Street 1, 0123, Oslo";
 
       patchDoc.ApplyTo(exampleUser, ModelState);
       if (!TryValidateModel(exampleUser))
@@ -147,19 +153,24 @@ namespace Backend.Controllers
 
     }
 
+    // GET api/signup/users/postalcode/{postalCode}
+    [HttpGet("postalcode/{postalCode}")]
+    public ActionResult<string> GetCityByPostalCode(string postalCode)
+    {
+      Response.Headers.Add("Access-Control-Allow-Origin", "*");
+      var city = _repository.GetCityByPostalCode(postalCode);
+      if (city == null)
+      {
+        return NotFound();
+      }
+      return Ok(city);
+    }
+
     private async Task<User> MapToBrisUser(UserCreateDto userCreateDto)
     {
       BrisUser brisUser = await _repository.GetBrisUserBySsn(userCreateDto.Ssn);
-      string city = _repository.GetCityByPostalCode(userCreateDto.Address.Split(',')[1].Trim());
-      if (city == null)
-      {
-        ModelState.AddModelError(string.Empty, "Invalid postal code.");
-      }
-      string address = $"{userCreateDto.Address}, {city}";
-      User user = _mapper.Map<User>(userCreateDto, opt =>
-      {
-        opt.AfterMap((src, dest) => dest.Address = address);
-      });
+
+      User user = _mapper.Map<User>(userCreateDto);
       string bdate = Helper.SsnToBirthDate(userCreateDto.Ssn);
       if (bdate == null)
       {
