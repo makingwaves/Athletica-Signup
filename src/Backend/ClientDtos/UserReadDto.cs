@@ -22,5 +22,7 @@ namespace Backend.ClientDtos
 
     public int? BrisId { get; set; }
 
+    public string Ssn { get; set; }
+
   }
 }
