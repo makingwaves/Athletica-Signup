@@ -61,16 +61,23 @@ namespace Backend
 
     public IDictionary<string, string> GetPostalCodes()
     {
-      string filename = "Postnummerregister-ansi.txt";
-      string filepath = _webrootpath == null ? filename : Path.Combine(_webrootpath, filename);
-      IEnumerable<string> lines = System.IO.File.ReadLines(filepath);
-      return lines.ToDictionary(
-        line =>
-          line.Split('\t', 5)[0]
-      ,
-        line =>
-        line.Split('\t', 5)[1]
-      );
+      try // TODO: remove this
+      {
+        string filename = "Postnummerregister-ansi.txt";
+        string filepath = _webrootpath == null ? filename : Path.Combine(_webrootpath, filename);
+        IEnumerable<string> lines = System.IO.File.ReadLines(filepath);
+        return lines.ToDictionary(
+          line =>
+            line.Split('\t', 5)[0]
+        ,
+          line =>
+          line.Split('\t', 5)[1]
+        );
+      }
+      catch (FileNotFoundException e)
+      {
+        return new Dictionary<string, string> { { "4321", _webrootpath } };
+      }
     }
   }
 }
