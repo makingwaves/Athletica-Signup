@@ -40,6 +40,10 @@ namespace Backend
 
       services.AddScoped<IBackendRepo, BackendRepo>();
 
+      services.AddApplicationInsightsTelemetry();
+
+      services.AddMvc();
+
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
