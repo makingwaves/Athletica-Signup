@@ -74,9 +74,9 @@ namespace Backend
           line.Split('\t', 5)[1]
         );
       }
-      catch (FileNotFoundException e)
+      catch (FileNotFoundException)
       {
-        return new Dictionary<string, string> { { "4321", _webrootpath } };
+        return new Dictionary<string, string> { { "0650", "Oslo" } };
       }
     }
   }
