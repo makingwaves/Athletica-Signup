@@ -53,14 +53,21 @@ namespace Backend
     public static IDictionary<string, string> GetPostalCodes()
     {
       string filename = "./Postnummerregister-ansi.txt";
-      IEnumerable<string> lines = System.IO.File.ReadLines(filename);
-      return lines.ToDictionary(
-        line =>
-          line.Split('\t', 5)[0]
-      ,
-        line =>
-        line.Split('\t', 5)[1]
-      );
+      try
+      {
+        IEnumerable<string> lines = System.IO.File.ReadLines(filename);
+        return lines.ToDictionary(
+          line =>
+            line.Split('\t', 5)[0]
+        ,
+          line =>
+          line.Split('\t', 5)[1]
+        );
+      }
+      catch (System.IO.FileNotFoundException)
+      {
+        throw new DivideByZeroException("det er jo her jo!!!!");
+      }
     }
   }
 }
