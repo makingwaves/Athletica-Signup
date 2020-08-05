@@ -1,27 +1,25 @@
 <template>
-    <div class="box">
-        <p>{{ label }}</p>
-    </div>
+  <div class="baseInfoBox" :style="{'background-color': color}">
+    <p>{{ label }}</p>
+  </div>
 </template>
 
 <script>
-
 export default {
-    name: 'BaseInfoBox',
-    props: [
-        'label'
-    ],
-    components: {
-        
-    }
-}
+  name: "BaseInfoBox",
+  props: {
+    label: String,
+    color: String
+  },
+  components: {}
+};
 </script>
 
 <style>
-.box {
-    padding: 10px;
-    background: #D3FBE0;
-    border-radius: 5px;
-    display: inline-block;
+.baseInfoBox {
+  display: inline-block;
+  padding: 12px 12px 4px 12px;
+  border-radius: 7px;
+  font-size: 12px;
 }
 </style>

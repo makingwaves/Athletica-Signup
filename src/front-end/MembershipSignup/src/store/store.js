@@ -53,6 +53,9 @@ export const store = new Vuex.Store( {
         SAVE_LAST_NAME(state, lastName) {
             state.user.lastName = lastName;
         },
+        SAVE_PHONE_NUMBER(state, number) {
+            state.user.phoneNumber = number;
+        },
         SAVE_ADDRESS(state, address) {
             state.user.address = address;
         },
@@ -61,6 +64,9 @@ export const store = new Vuex.Store( {
         },
         SAVE_SSN(state, ssn) {
             state.user.ssn = ssn;
+        },
+        SAVE_TODAYS_DATE(state, date) {
+            state.today = date;
         }
         /*
         SAVE_RELEVANT_CONTRACTS(state, contracts) {
@@ -84,6 +90,9 @@ export const store = new Vuex.Store( {
         saveLastName({commit}, lastName) {
             commit('SAVE_LAST_NAME', lastName);
         },
+        savePhoneNumber({commit}, number) {
+            commit('SAVE_PHONE_NUMBER', number)
+        },
         saveAddress({commit}, address) {
             commit('SAVE_ADDRESS', address);
         },
@@ -92,6 +101,9 @@ export const store = new Vuex.Store( {
         },
         saveSsn({commit}, ssn) {
             commit('SAVE_SSN', ssn);
+        },
+        saveTodaysDate({commit}, date) {
+            commit('SAVE_TODAYS_DATE', date);
         }
         /*loadLearningInsts({commit}) {
             learningInstRepo.getAll().then((response) => {

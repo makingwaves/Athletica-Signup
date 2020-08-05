@@ -5,7 +5,7 @@ import Contracts from './contracts.api'
 const repositories = {
     'users': Users,
     'learningInst': LearningInst,
-    'contracts': Contracts,
+    'contracts': Contracts
 }
 
 export default {

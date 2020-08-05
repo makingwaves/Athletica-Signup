@@ -1,7 +1,7 @@
 <template>
     <div>
-        <router-link to="/"><h5>Gå tilbake</h5></router-link>
-        <h3>Jeg er student/snart student</h3>
+        <BaseProgressBar/>
+        <p class="p2">Velg ditt studiested</p>
         <b-form-select id="learningInstDropDown" v-model="selected">
             <template v-slot:first>
                 <b-form-select-option :value="null" disabled>Velg utdanningsinstitusjon</b-form-select-option>

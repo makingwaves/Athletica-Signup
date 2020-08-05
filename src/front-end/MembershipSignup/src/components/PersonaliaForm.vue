@@ -1,15 +1,18 @@
 <template>
-    <div class="checkInput" v-bind:class="numberValidation">
+    <div class="checkInput">
         <h3>Personalia</h3>
+        <div class="blabla" v-bind:class="numberValidation">
         <b-form-group label="Fullt navn">
             <b-form-input id="fullName" v-model="name" @blur="nameValidation"></b-form-input>
         </b-form-group>
         <b-form-group label="Telefonnummer">
             <p>Bruk gjerne nummeret du gav til universitetet ditt.</p>
-            <b-form-input id="phoneNumber" placeholder="8 siffer" v-model="number"></b-form-input>
+            <b-form-input id="phoneNumber" placeholder="8 siffer" v-model="number" @blur="saveNumber"></b-form-input>
         </b-form-group>
+        </div>
 
         <!-- TODO: Flesh out scenario "Har SiO-bruker, må logge inn" -->
+        <div class="hihi" v-bind:class="ssnValidation">
         <PersonaliaUserExists v-if="userExists">
             <template #hasuser>
                 <p>USER EXISTS</p>
@@ -31,11 +34,16 @@
                     <b-form-input id="emailAddress" v-model="email" @blur="emailValidation"></b-form-input>
                 </b-form-group>
                 <b-form-group label="Fødselsnummer">
-                    <p>Vi bruker fødselsnummeret ditt for å sjekke at du har betalt semesteravgift</p>
-                    <b-form-input id="socialSecurityNumber" placeholder="13 siffer" v-model="socSecNum" @blur="ssnValidation"></b-form-input>
+                    <BaseInfoBox label="Vi bruker fødselsnummeret ditt for å sjekke at du har betalt semesteravgift"/>
+                    <b-form-input id="socialSecurityNumber" placeholder="11 siffer" v-model="socSecNum" @blur="saveSsn"></b-form-input>
                 </b-form-group>
+                <!-- This doesn't work -->
+                <BaseInfoBox v-if="lastFeePaidThisSemester === false"
+                label="Vi fant ingen SiO-bruker med disse opplysningene. En SiO-bruker vil bli opptrettet 
+                automatisk slik at du kan benytte deg av SiO-tjenester." color="#FFEF9E"/>
             </template>
         </PersonaliaNewUser>
+        </div>
 
     </div>
 </template>
@@ -58,6 +66,7 @@ export default {
             socSecNum: "",
             userExists: null,
             address: "",
+            lastFeePaidThisSemester: null,
         }
     },
     components: {
@@ -75,6 +84,41 @@ export default {
                     console.log(error.response.data);
                 } catch(e) {}
             });
+        },
+        checkStudentFeeBySsn(ssn) {
+            UsersApi.getStudentFeeBySsn(ssn).then((response) => {
+                try {
+                    var lastFeePaid = response.data.lastPaidStudentFee;
+                    // TODO: ADD LOADING WHEEL AND PAUSE SOMEWHERE HERE
+                    if(lastFeePaid) {
+                        this.checkLastPaidFeeStatus(lastFeePaid);
+                    }
+                } catch(e) {console.log(error.response.data);}
+            }).catch((error) => {
+                try {
+                    console.log(error.response.data);
+                } catch(e) {}
+            });
+        },
+        checkLastPaidFeeStatus(lastFeePaid) {
+            var today = new Date().toLocaleDateString().split(".");
+            this.formatToday(today);
+            var currentMonth = parseInt(today[1]);
+            var currentSemester = today[2];
+
+            /* Assuming that one can pay the student fee for a 
+            new semester earliest at July 1st.*/
+            if(currentMonth < 7) {
+                currentSemester = currentSemester.concat('V');
+            } else {
+                currentSemester = currentSemester.concat('H');
+            }
+
+            if(lastFeePaid === currentSemester) {
+                this.lastFeePaidThisSemester = true;
+            } else {
+                this.lastFeePaidThisSemester = false;
+            }
         },
         nameValidation() {
             // The regex does not handle special characters (like é)
@@ -121,28 +165,54 @@ export default {
                 this.$store.dispatch('saveEmailAddress', this.email)
             }
         },
-        ssnValidation() {
-            let regSsn = /^\d{11}$/;
-            if(!regSsn.test(this.socSecNum)) {
-                console.log('Invalid ssn')
-            } else {
-                console.log('Valid ssn')
-                this.$store.dispatch('saveSsn', this.socSecNum)
-            }
+        saveNumber() {
+            console.log('Phone number saved')
+            this.$store.dispatch('savePhoneNumber', this.number)
+        },
+        saveSsn() {
+            this.$store.dispatch('saveSsn', this.socSecNum);
+            this.$emit('timeForSummary');
+        },
+        formatToday(today) {
+            var list = today;
+            var todayFormatted = "";
+            list.forEach((element, i) => {
+                if(element.length < 2) {
+                    var addZero = element.replace(element, '0' + element)
+                    list[i] = addZero;
+                }
+            });
+            todayFormatted = todayFormatted.concat(list[0], list[1], list[2]);
+            this.$store.dispatch('saveTodaysDate', todayFormatted);
         }
     },
     computed: {
     numberValidation: function () {
       if (this.number.length === 8) {
-          console.log("CORRECT")
+          console.log("Valid phone number")
           this.checkUserByNumber(this.number);
         return 'valid';
       } else {
-          console.log("INCORRECT")
+          console.log("Invalid phone number")
         return 'invalid';
       }
+    },
+    ssnValidation: function () {
+        if (this.socSecNum.length === 11) {
+            console.log("Valid ssn");
+            this.checkStudentFeeBySsn(this.socSecNum);
+            return 'valid';
+        } else {
+            console.log("Invalid ssn");
+            return 'invalid';
+        }
     }
-  }
+  },
+  /*watch: {
+    lastFeePaidThisSemester: function(val) {
+
+    }
+  }*/
 }
 </script>
 
