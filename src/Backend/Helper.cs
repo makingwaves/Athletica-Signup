@@ -52,8 +52,8 @@ namespace Backend
 
     public static IDictionary<string, string> GetPostalCodes()
     {
-      string filename = "./Postnummerregister-ansi.txt";
-      try
+      string filename = "Postnummerregister-ansi.txt";
+      try // TODO: remove!!!
       {
         IEnumerable<string> lines = System.IO.File.ReadLines(filename);
         return lines.ToDictionary(
