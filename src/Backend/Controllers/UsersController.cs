@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers
 {
-  [Route("/api/signup/users")]
+  [Route("api/signup/users")]
   [ApiController]
   public class UsersController : ControllerBase
   {

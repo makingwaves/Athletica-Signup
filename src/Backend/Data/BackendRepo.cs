@@ -18,14 +18,13 @@ namespace Backend.Data
   {
     private readonly ApiRetriever _apiRetriever;
     private readonly IMapper _mapper;
-
     private readonly IDictionary<string, string> _postalCodes;
 
-    public BackendRepo(IMapper mapper, IConfiguration configuration)
+    public BackendRepo(IMapper mapper, IConfiguration configuration, Helper helper)
     {
       _apiRetriever = new ApiRetriever(mapper, configuration);
       _mapper = mapper;
-      _postalCodes = Helper.GetPostalCodes();
+      _postalCodes = helper.GetPostalCodes();
     }
 
     public async Task<bool> CreateMembership(Membership membership)
