@@ -21,9 +21,5 @@ namespace Backend.Models
     [Required]
     public int MonthlyFeeNok { get; set; }
 
-    [Required]
-    public string Pdf { get; set; }
-
-
   }
 }

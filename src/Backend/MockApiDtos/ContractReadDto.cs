@@ -10,8 +10,5 @@ namespace Backend.MockApiDtos
 
     public int MonthlyFeeNok { get; set; }
 
-    public string Pdf { get; set; }
-
-
   }
 }
