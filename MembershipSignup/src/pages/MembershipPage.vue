@@ -3,30 +3,30 @@
     <div class="membershipChoice">
       <h6>Velg medlemskap</h6>
       <b-card-group deck class="cardDeck">
-        <b-card v-for="card in cards" :key="card.id" style="max-width: 20rem;" class="mb-2">
-          <p class="subtitle2">{{card.getLockInText()}}</p>
-          <h4>{{card.getPrice()}},-</h4>
-          <p>/måned</p>
-          <ul>
-            <li v-for="text in card.infoText" v-bind:key="text">{{text}}</li>
-          </ul>
-          <BaseButton v-on:BaseButton-clicked="membershipChosen(card.id)" text="Velg" />
-        </b-card>
+          <b-card v-for="card in cards" :key="card.id" class="mb-2 card" id="carrd">
+              <img v-if="showTick" src="../assets/icons/checkmark.svg"/>
+              <p class="subtitle2">{{card.getLockInText()}}</p>
+              <h4>{{card.getPrice()}},-</h4>
+              <p>/måned</p>
+              <BaseButton v-on:BaseButton-clicked="membershipChosen(card.id)" text="Velg" classType="sec"/>
+          </b-card>
       </b-card-group>
       <!-- TODO: Dinne vise før korta e ferdilaga, blir litt lagg i UI. Display litt seinare -->
       <BaseInfoBox label="Hva er AvtaleGiro? Banken betaler regningen for deg, uten at du trenger å godkjenne først.
         Du slipper å huske på forfallsdatoer og unngår fakturagebyr.
         Vi trekker den første hver måned."/>
     </div>
-    <div class="personalia">
-      <PersonaliaForm />
-    </div>
-    <div>
-      <Summary>
-        <template #summaryCard>
+    <div class="position">
+      <div class="personalia">
+        <PersonaliaForm />
+      </div>
+      <div>
+        <Summary>
+          <template #summaryCard>
 
-        </template>
-      </Summary>
+          </template>
+        </Summary>
+      </div>
     </div>
   </div>
 </template>
@@ -49,7 +49,8 @@ export default {
       cards: [],
       chosenCard: null,
       contractsByInst: [],
-      showSummary: false
+      showSummary: false,
+      showTick: false
     };
   },
   created() {
@@ -63,8 +64,10 @@ export default {
       console.log("TIME FOR SUMMARY")
     },
     membershipChosen(card) {
-      this.chosenCard = true;
-      this.$store.dispatch("saveChosenContractId", card);
+      document.getElementById("carrd").className = 'mb-2 card'
+      this.chosenCard = null;
+      this.chosenCard = card;
+      document.getElementById("carrd").className = 'mb-2 card active'
     },
     getContracts(callback) {
       const Contracts = repo.get("contracts");
@@ -80,14 +83,11 @@ export default {
         let lockInText;
         let infoText;
         if (element.lockInPeriod === 0) {
-          lockInText = "MED BINDINGSTID";
+          lockInText = "MED BINDING";
           infoText = ["12 måneder bindingstid med AvtaleGiro", "Frys opp til 2 måneder det første året", "Du sparer 612,- over et år", "AvtaleGiro"];
         } else if (element.lockInPeriod === 1) {
-          lockInText = "UTEN BINDINGSTID";
+          lockInText = "UTEN BINDING";
           infoText = ["Ingen binding", "Frys opp til 1 måned per år", "AvtaleGiro"];
-        } else {
-          lockInText = "KUN ÉN MÅNED";
-          infoText = ["Medlemskapet løper én måned før det avsluttes automatisk"];
         }
         var card = new MembershipCard(
           element.id,
@@ -98,12 +98,40 @@ export default {
         this.cards.push(card);
       });
     }
+  },
+  computed: {
+    getInfoTexts: function() {
+      var texts = [];
+      for(var i = 0; i < this.cards.length; i++){
+        for(var k = 0; k < this.cards[i].length; k++){
+          texts.push(this.cards[i][k].infoText);
+        }
+      }
+      return texts;
+    },
+  },
+  watch: {
+    chosenCard: function(val) {
+            this.membershipChosen;
+        }
   }
 };
 </script>
 
 <style>
 .cardDeck {
-  justify-content: center;
+  text-align: center;
+}
+
+.card {
+  max-width: 18rem;
+  border: 1px solid #FFB0A7;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.active {
+  background-color: #61177B;
+  color: WHITE;
 }
 </style>

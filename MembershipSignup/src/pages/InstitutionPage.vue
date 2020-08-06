@@ -1,14 +1,16 @@
 <template>
     <div>
         <BaseProgressBar/>
-        <p class="p2">Velg ditt studiested</p>
-        <b-form-select id="learningInstDropDown" v-model="selected">
-            <template v-slot:first>
-                <b-form-select-option :value="null" disabled>Velg utdanningsinstitusjon</b-form-select-option>
-            </template>
-            <b-form-select-option :value="inst" v-for="inst in learningInsts" v-bind:key="inst.name">{{inst.name}}</b-form-select-option>
-        </b-form-select>
-        <MembershipPage v-if="selected" :key="selected.id" :selected="selected"/>
+        <div class="learningInst">
+            <p class="p2">Velg ditt studiested</p>
+            <b-form-select id="learningInstDropDown" v-model="selected">
+                <template v-slot:first>
+                    <b-form-select-option :value="null" disabled>Velg utdanningsinstitusjon</b-form-select-option>
+                </template>
+                <b-form-select-option :value="inst" v-for="inst in learningInsts" v-bind:key="inst.name">{{inst.name}}</b-form-select-option>
+            </b-form-select>
+            <MembershipPage v-if="selected" :key="selected.id" :selected="selected"/>
+        </div>
     </div>
 </template>
 
@@ -45,6 +47,11 @@ export default {
 </script>
 
 <style>
+
+.learningInst {
+    text-align: left;
+    margin-left: 10%;
+}
 
 #learningInstDropDown {
     width: 70%;

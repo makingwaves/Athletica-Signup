@@ -7,7 +7,7 @@ export default {
         return Client.get(RESOURCE_NAME);
     },
     getUserByNumber(num) {
-        return Client.get(`${RESOURCE_NAME}` + `existing`, {
+        return Client.get(`${RESOURCE_NAME}` + `byphone`, {
             params: {
                 phoneNumber: num
             }
@@ -21,12 +21,9 @@ export default {
         })
     },
     getCityByPostalCode(postalCode) {
-        return Client.get(`${RESOURCE_NAME}` + `postalcode`, {
-            params: {
-                postalCode: postalCode
-            }
-        });
+        return Client.get(`${RESOURCE_NAME}postalcode/${postalCode}`)
     },
+
     postUser(first, last, inst, email, num, address, ssn) {
         return Client.post(`/api/signup/users`, {
                 firstName: first,

@@ -53,7 +53,8 @@ export default {
   display: grid;
   grid-template-columns: 20% 20% 20% 20% 20%;
   grid-gap: 15px;
-  z-index:9999
+  z-index:9999;
+  text-align: center;
 }
 
 .baseProgressBar img {

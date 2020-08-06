@@ -57,6 +57,13 @@ requireComponent.keys().forEach(fileName => {
   )
 })
 
+import VueSmoothScroll from 'vue2-smooth-scroll'
+ 
+Vue.use(VueSmoothScroll, {
+  duration: 400,
+  updateHistory: false,
+})
+
 Vue.config.productionTip = false
 
 Axios.defaults.baseURL = process.env.API_ENDPOINT;

@@ -2,40 +2,62 @@
     <div class="checkInput">
         <h6>Personalia</h6>
         <div class="blabla" v-bind:class="numberValidation">
-        <b-form-group label="Fullt navn">
+        <b-form-group>
+            <label class="formLabel" for="fullName">Fullt navn</label>
             <b-form-input id="fullName" v-model="name" @blur="nameValidation"></b-form-input>
         </b-form-group>
         <b-form-group label="Telefonnummer">
-            <p>Bruk gjerne nummeret du gav til universitetet ditt.</p>
             <b-form-input id="phoneNumber" placeholder="8 siffer" v-model="number" @blur="saveNumber"></b-form-input>
         </b-form-group>
         </div>
 
         <!-- TODO: Flesh out scenario "Har SiO-bruker, må logge inn" -->
         <div class="hihi" v-bind:class="ssnValidation">
-        <PersonaliaUserExists v-if="userExists">
+        <PersonaliaUserExists v-if="existingUser">
             <template #hasuser>
-                <p>USER EXISTS</p>
+                <BaseInfoBox label="DU HAR BRUKER" color="#FFEF9E"/>
+                <div>
+                    <BaseButton id="show-btn" v-on:BaseButton-clicked="showModal" text="Logg inn"/>
+
+                    <b-modal id="modal-center" ref="my-modal" hide-footer centered>
+                        <template v-slot:modal-header="{}">
+                            <h5>Logg inn på SiO.no</h5>
+                        </template>
+                        <template v-slot:default="{}">
+                            <b-form-group label="E-post">
+                                <b-form-input id="emailAddress" v-model="email" @blur="emailValidation"></b-form-input>
+                            </b-form-group>
+                            <b-form-group label="Passord">
+                                <b-form-input type="password"></b-form-input>
+                            </b-form-group>
+                            <BaseButton v-on:BaseButton-clicked="hideModal" text="Logg inn"/>
+                            <div class="text-center" v-if="loading">
+                                <b-spinner variant="primary" label="Text Centered"></b-spinner>
+                            </div>
+                        </template>     
+                    </b-modal>
+                </div>
             </template>
         </PersonaliaUserExists>
 
-        <PersonaliaNewUser v-else-if="userExists === false">
+        <PersonaliaNewUser v-if="existingUser === false">
             <template #newuser>
                 <BaseInfoBox label="Du trenger SiO-bruker for å trene hos Athletica.
                 Ved å opprette SiO-bruker kan du få studentpriser på medlemskapet ditt." />
-                <h3>Registrer SiO-bruker</h3>
+                <h6 id="registerSIO">Registrer SiO-bruker</h6>
                 <b-form-group label="Gatenavn og nummer">
                     <b-form-input id="streetAddress" placeholder="Eksempel: Gatenavn 24" v-model="street" @blur="streetValidation"></b-form-input>
                 </b-form-group>
                 <b-form-group label="Postnummer">
                     <b-form-input id="postalCode" v-model="postal" @blur="postalValidation"></b-form-input>
+                    <div style="float: right">{{ postalCity }}</div>
                 </b-form-group>
                 <b-form-group label="E-post">
                     <b-form-input id="emailAddress" v-model="email" @blur="emailValidation"></b-form-input>
                 </b-form-group>
                 <b-form-group label="Fødselsnummer">
                     <BaseInfoBox label="Vi bruker fødselsnummeret ditt for å sjekke at du har betalt semesteravgift"/>
-                    <b-form-input id="socialSecurityNumber" placeholder="11 siffer" v-model="socSecNum" @blur="saveSsn"></b-form-input>
+                    <b-form-input id="ssn" placeholder="11 siffer" v-model="socSecNum" @blur="saveSsn"></b-form-input>
                 </b-form-group>
                 <!-- This doesn't work -->
                 <BaseInfoBox v-if="lastFeePaidThisSemester === false"
@@ -63,10 +85,12 @@ export default {
             street: "",
             email: "",
             postal: "",
+            postalCity: "",
             socSecNum: "",
-            userExists: null,
+            existingUser: null,
             address: "",
             lastFeePaidThisSemester: null,
+            loading: false,
         }
     },
     components: {
@@ -74,16 +98,40 @@ export default {
         PersonaliaNewUser
     },
     methods: {
+        showModal() {
+        this.$refs['my-modal'].show()
+        },
+        hideModal() {
+            this.loading = true;
+            setTimeout(() => {
+                this.$refs['my-modal'].hide()
+                }, 2000);
+        },
         checkUserByNumber(userNum) {
             UsersApi.getUserByNumber(userNum).then((response) => {
                 try {
-                    this.userExists = response.data.exists;
+                    this.existingUser = response.data;
+                    document.getElementById("streetAddress").value = this.existingUser.address;
+                    document.getElementById("postalCode").value = this.existingUser.address;
+                    document.getElementById("emailAddress").value = this.existingUser.email;
+                    document.getElementById("ssn").value = this.existingUser.ssn;
                 } catch(e) {}
                 }).catch((error) => {
                 try {
                     console.log(error.response.data);
+                    this.existingUser = false;
+                    document.getElementById("streetAddress").value = "";
+                    document.getElementById("postalCode").value = "";
+                    document.getElementById("emailAddress").value = "";
+                    document.getElementById("ssn").value = "";
                 } catch(e) {}
             });
+            var regScroll = document.getElementById("registerSIO");
+            /*this.$smoothScroll({
+                scrollTo: regScroll,
+                duration: 1500,
+                offset: -50,
+                })*/
         },
         checkStudentFeeBySsn(ssn) {
             UsersApi.getStudentFeeBySsn(ssn).then((response) => {
@@ -152,10 +200,19 @@ export default {
                 console.log('Invalid postal code')
             } else {
                 console.log('Valid postal code')
-                // TODO: Stop hardcoding Oslo value if possible
-                this.address = this.address.concat(this.postal + ", " + "Oslo")
-                console.log(this.address)
-                this.$store.dispatch('saveAddress', this.address);
+                this.address = "";
+                UsersApi.getCityByPostalCode(this.postal).then((response) => {
+                try {
+                    this.postalCity = response.data;
+                    this.address = this.address.concat(this.postal + ", " + this.postalCity)
+                    this.$store.dispatch('saveAddress', this.address);
+                    console.log(this.address)
+                } catch(e) {console.log(error.response.data);}
+            }).catch((error) => {
+                try {
+                    console.log(error.response.data);
+                } catch(e) {}
+            });
             }
         },
         emailValidation() {
@@ -221,5 +278,16 @@ export default {
 <style>
 .checkInput {
     margin: 0 20% 0 20%;
+}
+
+#postalCode {
+    width: 70%;
+    float:left;
+}
+
+.formLabel {
+    text-align: left;
+    vertical-align: left;
+    
 }
 </style>

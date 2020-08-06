@@ -93,6 +93,9 @@ export default {
 </script>
 
 <style>
+.startpage {
+  text-align: center;
+}
 .studentChoiceButtons {
   margin: 30px;
 }

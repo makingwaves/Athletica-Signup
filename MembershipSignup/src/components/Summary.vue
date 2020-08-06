@@ -2,7 +2,7 @@
     <div class="summary">
         <h6>Oppsummering og betaling</h6>
         <slot name="summaryCard"></slot>
-        <BaseButton v-on:BaseButton-clicked="createUser" text="Opprett bruker"/>
+        <BaseButton v-on:BaseButton-clicked="createUser" text="Opprett bruker" classType="prim"/>
     </div>
 </template>
 
@@ -25,18 +25,14 @@ export default {
             user.email, user.phoneNumber, user.address, user.ssn).then((response) => {
                 try {
                     this.response = response.data;
-                    console.log(this.response.data)
+                    console.log(this.response)
+                    console.log("HELLOO")
                 } catch(e) {}
                 }).catch((error) => {
                 try {
                     console.log(error.response.data);
                 } catch(e) {}
             })
-            /*Users.postUser("firstName", "lastName", "learningInstitutionId", 
-            "email", "phoneNumber", "address", "ssn").then((response) => {
-                this.response = response.data;
-                console.log(this.response)
-            })*/
         }
     }
 }
