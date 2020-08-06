@@ -29,6 +29,7 @@ namespace Backend
       int c2 = 11 - ((5 * digits[0] + 4 * digits[1] + 3 * digits[2] + 2 * digits[3] + 7 * digits[4] + 6 * digits[5] + 5 * digits[6] + 4 * digits[7] + 3 * digits[8] + 2 * c1) % 11);
 
       c2 = (c2 == 11 ? 0 : c2);
+      c1 = (c1 == 11 ? 0 : c1);
 
       // TODO: readd comments
       /*if (c1 != digits[9]
