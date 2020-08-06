@@ -85,16 +85,26 @@ Returns 204 No content if successful.
 ## Users
 
 ```http
-GET api/signup/users/existing?phoneNumber={nr}
+GET api/signup/users/byphone?phoneNumber={nr}
 ```
 
-Returns 200 OK along with an object containing a bool `exists`, indicating whether a user with that phone number exists or not.
+Returns 200 OK along with a user object, or 404 Not found if the user does not exist.
 
 Example response body:
 
 ```json
 {
-  "exists": true
+  "id": 1,
+  "firstName": "Ola",
+  "lastName": "Nordmann",
+  "lastPaidStudentFee": "2020V",
+  "birthDate": "17052014",
+  "learningInstitutionId": 1,
+  "email": "mariusgenser@norway.no",
+  "phoneNumber": "54321234",
+  "address": "Norgegata 47, 1814, Askim",
+  "brisId": 1,
+  "ssn": "17051453111"
 }
 ```
 
