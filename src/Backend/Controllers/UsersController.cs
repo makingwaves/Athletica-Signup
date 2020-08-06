@@ -24,7 +24,7 @@ namespace Backend.Controllers
 
     // GET api/signup/users/byphone?phoneNumber={phoneNumber}
     [HttpGet("byphone")]
-    public async Task<ActionResult<UserReadDto>> GetUserByPhoneNumber([FromQuery] string phoneNumber)
+    public async Task<ActionResult> GetUserByPhoneNumber([FromQuery] string phoneNumber)
     {
       Response.Headers.Add("Access-Control-Allow-Origin", "*");
       if (phoneNumber == null)
@@ -36,7 +36,12 @@ namespace Backend.Controllers
       {
         return NotFound();
       }
-      return Ok(_mapper.Map<UserReadDto>(user));
+      var membership = await _repository.GetMembershipByUserId(user.Id);
+      return Ok(new
+      {
+        user = _mapper.Map<UserReadDto>(user),
+        isMember = membership != null
+      });
     }
 
     // GET api/signup/users/byemail?email={email}

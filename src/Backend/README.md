@@ -88,23 +88,26 @@ Returns 204 No content if successful.
 GET api/signup/users/byphone?phoneNumber={nr}
 ```
 
-Returns 200 OK along with a user object, or 404 Not found if the user does not exist.
+Returns 200 OK along with an object containing the user, a bool indicating whether they are already a member or not, or 404 Not found if the user does not exist.
 
 Example response body:
 
 ```json
 {
-  "id": 1,
-  "firstName": "Ola",
-  "lastName": "Nordmann",
-  "lastPaidStudentFee": "2020V",
-  "birthDate": "17052014",
-  "learningInstitutionId": 1,
-  "email": "mariusgenser@norway.no",
-  "phoneNumber": "54321234",
-  "address": "Norgegata 47, 1814, Askim",
-  "brisId": 1,
-  "ssn": "17051453111"
+  "user": {
+    "id": 1,
+    "firstName": "Ola",
+    "lastName": "Nordmann",
+    "lastPaidStudentFee": "2020V",
+    "birthDate": "17052014",
+    "learningInstitutionId": 1,
+    "email": "mariusgenser@norway.no",
+    "phoneNumber": "54321234",
+    "address": "Norgegata 47, 1814, Askim",
+    "brisId": 1,
+    "ssn": "17051453111"
+  },
+  "isMember": false
 }
 ```
 
