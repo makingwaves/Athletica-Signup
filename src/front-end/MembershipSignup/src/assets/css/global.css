@@ -15,6 +15,7 @@ h4,
 .subtitle2 {
   font-family: "ProximaNova-Bold";
   src: url("../fonts/ProximaNova-Bold.otf");
+  margin-top: 15px;
 }
 
 h6,
@@ -87,6 +88,7 @@ h6 {
   font-weight: 500;
   font-size: 32px;
   line-height: 44px;
+  margin-top: 40px;
 }
 
 .wrapper {
@@ -103,4 +105,19 @@ h6 {
 
 .offerBox img {
   float: left;
+}
+
+.prim {
+  background: #47e17a;
+  border-radius: 25px;
+  border: 0;
+  padding: 7px 24px;
+}
+
+.sec {
+  background: white;
+  border: 1;
+  border-color: #2C0A38;
+  border-radius: 25px;
+  padding: 5px 24px;
 }
