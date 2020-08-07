@@ -1,29 +1,32 @@
 <template>
   <div class="createMembership">
     <div class="membershipChoice">
-      <h3>Velg medlemskap</h3>
+      <h6>Velg medlemskap</h6>
       <b-card-group deck class="cardDeck">
-        <b-card v-for="card in cards" :key="card.id" style="max-width: 20rem;" class="mb-2">
-          <h5>{{card.getLockInText()}}</h5>
-          <h1>{{card.getPrice()}},-</h1>
-          <p>/måned</p>
-          <h5>{{card.getInfoSentence()}}</h5>
-          <BaseInfoBox :label="card.getLabel()" style="background-color: WHITE" />
-          <BaseButton v-on:BaseButton-clicked="membershipChosen(card.id)" text="Velg" />
-        </b-card>
+          <b-card v-for="card in cards" :key="card.id" :class="(isChosen(card.id) ? `mb-2 active` : `mb-2 card`)" id="carrd">
+              <img id="tick" src="../assets/icons/checkmark.svg" :style="(isChosen(card.id) ? `visibility: visible` : `visibility: hidden`)"/>
+              <p class="subtitle2">{{card.getLockInText()}}</p>
+              <h4>{{card.getPrice()}},-</h4>
+              <p>/måned</p>
+              <BaseButton v-on:BaseButton-clicked="membershipChosen(card.id)" text="Velg" classType="sec"/>
+          </b-card>
       </b-card-group>
       <!-- TODO: Dinne vise før korta e ferdilaga, blir litt lagg i UI. Display litt seinare -->
-      <BaseInfoBox>
-        <b>Hva er AvtaleGiro?</b> Banken betaler regningen for deg, uten at du trenger å godkjenne først.
+      <BaseInfoBox label="Hva er AvtaleGiro? Banken betaler regningen for deg, uten at du trenger å godkjenne først.
         Du slipper å huske på forfallsdatoer og unngår fakturagebyr.
-        Vi trekker den første hver måned.
-      </BaseInfoBox>
+        Vi trekker den første hver måned."/>
     </div>
-    <div class="personalia">
-      <PersonaliaForm />
-    </div>
-    <div>
-      <Summary v-if="showSummary"/>
+    <div class="position">
+      <div class="personalia">
+        <PersonaliaForm />
+      </div>
+      <div>
+        <Summary>
+          <template #summaryCard>
+
+          </template>
+        </Summary>
+      </div>
     </div>
   </div>
 </template>
@@ -44,9 +47,9 @@ export default {
   data() {
     return {
       cards: [],
-      chosenCard: null,
+      chosenCard: 1,
       contractsByInst: [],
-      showSummary: false
+      showSummary: false,
     };
   },
   created() {
@@ -59,9 +62,13 @@ export default {
       showSummary: true;
       console.log("TIME FOR SUMMARY")
     },
+    isChosen(cardid) {
+      return cardid === this.chosenCard;
+    },
     membershipChosen(card) {
-      this.chosenCard = true;
-      this.$store.dispatch("saveChosenContractId", card);
+      this.chosenCard = null;
+      this.chosenCard = card;
+      console.log(this.chosenCard)
     },
     getContracts(callback) {
       const Contracts = repo.get("contracts");
@@ -76,36 +83,60 @@ export default {
         const fee = element.monthlyFeeNok;
         let lockInText;
         let infoText;
-        let label;
         if (element.lockInPeriod === 0) {
-          lockInText = "Med bindingstid";
-          infoText = "12 måneder bindingstid med AvtaleGiro";
-          label = "Du sparer 612,- over et år med bindingstid.";
+          lockInText = "MED BINDING";
+          infoText = ["12 måneder bindingstid med AvtaleGiro", "Frys opp til 2 måneder det første året", "Du sparer 612,- over et år", "AvtaleGiro"];
         } else if (element.lockInPeriod === 1) {
-          lockInText = "Uten bindingstid";
-          infoText = "AvtaleGiro";
-          label = "Medlemskapet går til du avslutter det selv.";
-        } else {
-          lockInText = "Kun én måned";
-          infoText = "";
-          label = "Medlemskapet løper én måned før det avsluttes automatisk.";
+          lockInText = "UTEN BINDING";
+          infoText = ["Ingen binding", "Frys opp til 1 måned per år", "AvtaleGiro"];
         }
         var card = new MembershipCard(
           element.id,
           lockInText,
           fee,
           infoText,
-          label
         );
         this.cards.push(card);
       });
     }
+  },
+  computed: {
+    getInfoTexts: function() {
+      var texts = [];
+      for(var i = 0; i < this.cards.length; i++){
+        for(var k = 0; k < this.cards[i].length; k++){
+          texts.push(this.cards[i][k].infoText);
+        }
+      }
+      return texts;
+    },
+  },
+  watch: {
+    chosenCard: function(val) {
+            this.membershipChosen;
+        }
   }
 };
 </script>
 
 <style>
 .cardDeck {
-  justify-content: center;
+  text-align: center;
+}
+
+.card {
+  max-width: 18rem;
+  border: 1px solid #FFB0A7;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.active {
+  max-width: 18rem;
+  background-color: #61177B;
+  color: WHITE;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 0;
 }
 </style>

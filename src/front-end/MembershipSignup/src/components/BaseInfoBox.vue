@@ -18,8 +18,10 @@ export default {
 <style>
 .baseInfoBox {
   display: inline-block;
+  max-width: 500px;
   padding: 12px 12px 4px 12px;
   border-radius: 7px;
   font-size: 12px;
+  margin: 20px;
 }
 </style>

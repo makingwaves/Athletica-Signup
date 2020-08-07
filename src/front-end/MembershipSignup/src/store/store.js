@@ -33,9 +33,9 @@ export const store = new Vuex.Store( {
         storage: window.sessionStorage,
     })],
     getters: {
-        /*getContractsByInst: state => {
-            state.contractsByInst;
-        }*/
+        getUserData: state => {
+            return state.user;
+        }
     },
     mutations: {
         SAVE_CHOSEN_LEARNINGINST(state, learningInst) {
@@ -68,10 +68,6 @@ export const store = new Vuex.Store( {
         SAVE_TODAYS_DATE(state, date) {
             state.today = date;
         }
-        /*
-        SAVE_RELEVANT_CONTRACTS(state, contracts) {
-            state.contractsByInst = contracts;
-        }*/
     },
     modules,
     actions: {
@@ -105,19 +101,5 @@ export const store = new Vuex.Store( {
         saveTodaysDate({commit}, date) {
             commit('SAVE_TODAYS_DATE', date);
         }
-        /*loadLearningInsts({commit}) {
-            learningInstRepo.getAll().then((response) => {
-                commit('SAVE_LEARNINGINST', response.data);
-            }).catch(error => {
-                console.log(error.response.data);
-            })
-        },
-        loadContracts({commit}, instId) {
-            contractRepo.getContractsByLearningInst(instId).then((response) => {
-                commit('SAVE_RELEVANT_CONTRACTS', reponse.data);
-            }).catch(error => {
-                console.log(error.response.data);
-            })
-        }*/
     }
 })
