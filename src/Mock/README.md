@@ -152,21 +152,25 @@ All except `lockInPeriod` should be self-explanatory.
   ...
 }
 ```
-
-````json
-{
-  ...
-  "lockInPeriod": 0
-  ...
-}
+This means that the contract has a 12 month lock-in period
 
 ```json
 {
   ...
-  "lockInPeriod": 0
+  "lockInPeriod": 1
+  ...
+}
+This means that the contract has no lock-in period
+
+```json
+{
+  ...
+  "lockInPeriod": 2
   ...
 }
 ````
+
+This means that the contract is for a single month (this is being phased out.)
 
 ### Endpoints
 
