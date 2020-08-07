@@ -267,11 +267,6 @@ export default {
         }
     }
   },
-  /*watch: {
-    lastFeePaidThisSemester: function(val) {
-
-    }
-  }*/
 }
 </script>
 
@@ -283,11 +278,5 @@ export default {
 #postalCode {
     width: 70%;
     float:left;
-}
-
-.formLabel {
-    text-align: left;
-    vertical-align: left;
-    
 }
 </style>

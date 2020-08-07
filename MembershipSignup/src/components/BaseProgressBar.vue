@@ -5,7 +5,7 @@
         </router-link>
         <div v-for="item in progress" v-bind:key="item.step">
             <img :src="item.src"/>
-            <div>{{item.text}}</div>
+            <div class="captions">{{ item.text }}</div>
         </div>
     </div>
 </template>
@@ -19,22 +19,22 @@ export default {
                 {
                     step: 1,
                     text: "Medlemskap",
-                    src: require("../assets/icons/centers.svg")
+                    src: require("../assets/icons/1_active.svg")
                 },
                 {
                     step: 2,
                     text: "Personalia",
-                    src: require("../assets/icons/centers.svg")
+                    src: require("../assets/icons/2_inactive.svg")
                 },
                 {
                     step: 3,
                     text: "Betaling og AvtaleGiro",
-                    src: require("../assets/icons/centers.svg")
+                    src: require("../assets/icons/3_inactive.svg")
                 },
                 {
                     step: 4,
                     text: "Kvittering",
-                    src: require("../assets/icons/centers.svg")
+                    src: require("../assets/icons/4_inactive.svg")
                 },
             ]
         }

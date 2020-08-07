@@ -3,8 +3,8 @@
     <div class="membershipChoice">
       <h6>Velg medlemskap</h6>
       <b-card-group deck class="cardDeck">
-          <b-card v-for="card in cards" :key="card.id" class="mb-2 card" id="carrd">
-              <img v-if="showTick" src="../assets/icons/checkmark.svg"/>
+          <b-card v-for="card in cards" :key="card.id" :class="(isChosen(card.id) ? `mb-2 active` : `mb-2 card`)" id="carrd">
+              <img id="tick" src="../assets/icons/checkmark.svg" :style="(isChosen(card.id) ? `visibility: visible` : `visibility: hidden`)"/>
               <p class="subtitle2">{{card.getLockInText()}}</p>
               <h4>{{card.getPrice()}},-</h4>
               <p>/måned</p>
@@ -47,10 +47,9 @@ export default {
   data() {
     return {
       cards: [],
-      chosenCard: null,
+      chosenCard: 1,
       contractsByInst: [],
       showSummary: false,
-      showTick: false
     };
   },
   created() {
@@ -63,11 +62,13 @@ export default {
       showSummary: true;
       console.log("TIME FOR SUMMARY")
     },
+    isChosen(cardid) {
+      return cardid === this.chosenCard;
+    },
     membershipChosen(card) {
-      document.getElementById("carrd").className = 'mb-2 card'
       this.chosenCard = null;
       this.chosenCard = card;
-      document.getElementById("carrd").className = 'mb-2 card active'
+      console.log(this.chosenCard)
     },
     getContracts(callback) {
       const Contracts = repo.get("contracts");
@@ -131,7 +132,11 @@ export default {
 }
 
 .active {
+  max-width: 18rem;
   background-color: #61177B;
   color: WHITE;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 0;
 }
 </style>
