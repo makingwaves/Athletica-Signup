@@ -40,11 +40,7 @@
             </template>
         </PersonaliaUserExists>
 
-<<<<<<< Updated upstream
         <PersonaliaNewUser v-if="existingUser === false">
-=======
-        <PersonaliaNewUser>
->>>>>>> Stashed changes
             <template #newuser>
                 <BaseInfoBox label="Du trenger SiO-bruker for å trene hos Athletica.
                 Ved å opprette SiO-bruker kan du få studentpriser på medlemskapet ditt." />
@@ -204,21 +200,11 @@ export default {
                 console.log('Invalid postal code')
             } else {
                 console.log('Valid postal code')
-<<<<<<< Updated upstream
                 this.address = "";
                 UsersApi.getCityByPostalCode(this.postal).then((response) => {
                 try {
                     this.postalCity = response.data;
                     this.address = this.address.concat(this.postal + ", " + this.postalCity)
-=======
-                // TODO: Stop hardcoding Oslo value if possible
-                UsersApi.getCityByPostalCode(this.postal).then((response) => {
-                try {
-                    this.address = this.address.concat(this.postal + ", " + response.data)
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
                     this.$store.dispatch('saveAddress', this.address);
                     console.log(this.address)
                 } catch(e) {console.log(error.response.data);}
