@@ -20,12 +20,17 @@ jobs:
           node-version: 12
           registry-url: https://npm.pkg.github.com
       - name: Install Dependencies
-        run: npm install
+        run: |
+          pushd ./src/frontend/MembershipSignup
+          npm install
       - name: Build static site
-        run: npm run build
+        run: |
+          pushd ./src/frontend/MembershipSignup
+          npm run build
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}  
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_PATH: ./src/frontend/MembershipSignup/firebase.json  
