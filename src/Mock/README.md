@@ -160,6 +160,7 @@ This means that the contract has a 12 month lock-in period
   "lockInPeriod": 1
   ...
 }
+```
 This means that the contract has no lock-in period
 
 ```json
@@ -168,7 +169,7 @@ This means that the contract has no lock-in period
   "lockInPeriod": 2
   ...
 }
-````
+```
 
 This means that the contract is for a single month (this is being phased out.)
 
