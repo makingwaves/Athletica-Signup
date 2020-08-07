@@ -40,7 +40,11 @@
             </template>
         </PersonaliaUserExists>
 
+<<<<<<< Updated upstream
         <PersonaliaNewUser v-if="existingUser === false">
+=======
+        <PersonaliaNewUser>
+>>>>>>> Stashed changes
             <template #newuser>
                 <BaseInfoBox label="Du trenger SiO-bruker for å trene hos Athletica.
                 Ved å opprette SiO-bruker kan du få studentpriser på medlemskapet ditt." />
@@ -211,6 +215,9 @@ export default {
                 UsersApi.getCityByPostalCode(this.postal).then((response) => {
                 try {
                     this.address = this.address.concat(this.postal + ", " + response.data)
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                     this.$store.dispatch('saveAddress', this.address);
                     console.log(this.address)
