@@ -1,23 +1,21 @@
 <template>
     <div class="checkInput">
         <h6>Personalia</h6>
-        <div class="blabla" v-bind:class="numberValidation">
-        <b-form-group>
-            <label class="formLabel" for="fullName">Fullt navn</label>
+        <div class="inputField" v-bind:class="numberValidation">
+        <b-form-group label="Fullt navn">
             <b-form-input id="fullName" v-model="name" @blur="nameValidation"></b-form-input>
         </b-form-group>
-        <b-form-group label="Telefonnummer">
+        <b-form-group class="short" label="Telefonnummer">
             <b-form-input id="phoneNumber" placeholder="8 siffer" v-model="number" @blur="saveNumber"></b-form-input>
         </b-form-group>
         </div>
 
-        <!-- TODO: Flesh out scenario "Har SiO-bruker, må logge inn" -->
-        <div class="hihi" v-bind:class="ssnValidation">
+        <div v-bind:class="ssnValidation">
         <PersonaliaUserExists v-if="existingUser">
             <template #hasuser>
-                <BaseInfoBox label="DU HAR BRUKER" color="#FFEF9E"/>
+                <BaseInfoBox label="Det kan se ut som en SiO-bruker med dette telefonnummeret allerede er registrert. Logg inn for å autofylle informasjonen din." color="#FFEF9E"/>
                 <div>
-                    <BaseButton id="show-btn" v-on:BaseButton-clicked="showModal" text="Logg inn"/>
+                    <BaseButton classType="prim" id="show-btn" v-on:BaseButton-clicked="showModal" text="Logg inn"/>
 
                     <b-modal id="modal-center" ref="my-modal" hide-footer centered>
                         <template v-slot:modal-header="{}">
@@ -30,7 +28,7 @@
                             <b-form-group label="Passord">
                                 <b-form-input type="password"></b-form-input>
                             </b-form-group>
-                            <BaseButton v-on:BaseButton-clicked="hideModal" text="Logg inn"/>
+                            <BaseButton classType="prim" v-on:BaseButton-clicked="hideModal" text="Logg inn"/>
                             <div class="text-center" v-if="loading">
                                 <b-spinner variant="primary" label="Text Centered"></b-spinner>
                             </div>
@@ -190,8 +188,6 @@ export default {
                 console.log('Invalid street')
             } else {
                 console.log('Valid street')
-                this.address = this.street.concat(", ")
-                console.log(this.address)
             }
         },
         postalValidation() {
@@ -204,7 +200,7 @@ export default {
                 UsersApi.getCityByPostalCode(this.postal).then((response) => {
                 try {
                     this.postalCity = response.data;
-                    this.address = this.address.concat(this.postal + ", " + this.postalCity)
+                    this.address = this.address.concat(this.street + ", " + this.postal + ", " + this.postalCity)
                     this.$store.dispatch('saveAddress', this.address);
                     console.log(this.address)
                 } catch(e) {console.log(error.response.data);}
@@ -271,10 +267,6 @@ export default {
 </script>
 
 <style>
-.checkInput {
-    margin: 0 20% 0 20%;
-}
-
 #postalCode {
     width: 70%;
     float:left;

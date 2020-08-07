@@ -1,8 +1,5 @@
 <template>
     <div class="baseProgressBar">
-        <router-link to="/">
-            <img class="backarrow" src="../assets/icons/backarrow.svg" />
-        </router-link>
         <div v-for="item in progress" v-bind:key="item.step">
             <img :src="item.src"/>
             <div class="captions">{{ item.text }}</div>

@@ -21,7 +21,7 @@
         <PersonaliaForm />
       </div>
       <div>
-        <Summary>
+        <Summary v-if="showSummary">
           <template #summaryCard>
 
           </template>

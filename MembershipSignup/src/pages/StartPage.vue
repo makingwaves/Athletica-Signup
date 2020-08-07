@@ -16,10 +16,10 @@
       <h5>{{ headline }}</h5>
       <div class="studentChoiceButtons">
         <router-link to="/inst">
-          <BaseButton v-on:BaseButton-clicked="studentOrNot(true)" text="Jeg er student" />
+          <BaseButton classType="prim" v-on:BaseButton-clicked="studentOrNot(true)" text="Jeg er student" />
         </router-link>
         <br />
-        <BaseButton v-on:BaseButton-clicked="studentOrNot(false)" text="Jeg er ikke student" />
+        <BaseButton classType="prim" v-on:BaseButton-clicked="studentOrNot(false)" text="Jeg er ikke student" />
       </div>
       <BaseInfoBox
         color="#FFEF9E"

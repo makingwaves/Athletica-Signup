@@ -121,3 +121,11 @@ h6 {
   border-radius: 25px;
   padding: 5px 24px;
 }
+
+.inputField {
+  width: 300px;
+}
+
+.short {
+  width: 150px;
+}

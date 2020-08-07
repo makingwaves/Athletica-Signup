@@ -1,5 +1,6 @@
 <template>
   <div class="baseInfoBox" :style="{'background-color': color}">
+    <img src="../assets/icons/info.svg"/>
     <p>{{ label }}</p>
   </div>
 </template>
@@ -22,6 +23,6 @@ export default {
   padding: 12px 12px 4px 12px;
   border-radius: 7px;
   font-size: 12px;
-  margin: 20px;
+  margin: 20px auto 20px auto;
 }
 </style>

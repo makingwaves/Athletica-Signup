@@ -3,7 +3,7 @@
         <BaseProgressBar/>
         <div class="learningInst">
             <p class="p2">Velg ditt studiested</p>
-            <b-form-select id="learningInstDropDown" v-model="selected">
+            <b-form-select id="learningInstDropDown" class="inputField" v-model="selected">
                 <template v-slot:first>
                     <b-form-select-option :value="null" disabled>Velg utdanningsinstitusjon</b-form-select-option>
                 </template>
@@ -52,9 +52,4 @@ export default {
     text-align: left;
     margin-left: 10%;
 }
-
-#learningInstDropDown {
-    width: 70%;
-}
-
 </style>
