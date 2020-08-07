@@ -117,6 +117,22 @@ namespace Backend.Data
       return _mapper.Map<LearningInstitution>(instReadDto);
     }
 
+    public async Task<IEnumerable<Membership>> GetAllMemberships()
+    {
+      var response = await client.GetAsync($"{client.BaseAddress}/mock/memberships");
+      try
+      {
+        response.EnsureSuccessStatusCode();
+      }
+      catch (HttpRequestException)
+      {
+        Console.WriteLine(response.StatusCode);
+        return null;
+      }
+      var membershipReadDtos = await response.Content.ReadAsAsync<IEnumerable<MembershipReadDto>>();
+      return _mapper.Map<IEnumerable<Membership>>(membershipReadDtos);
+    }
+
     public async Task<IEnumerable<BrisUser>> GetBrisUsers()
     {
       var response = await client.GetAsync($"{client.BaseAddress}/mock/brisusers");

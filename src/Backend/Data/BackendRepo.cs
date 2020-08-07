@@ -118,5 +118,11 @@ namespace Backend.Data
         return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(city.ToLower());
       return null;
     }
+
+    public async Task<Membership> GetMembershipByUserId(int userId)
+    {
+      IEnumerable<Membership> memberships = await _apiRetriever.GetAllMemberships();
+      return memberships.FirstOrDefault(m => m.UserId == userId);
+    }
   }
 }
