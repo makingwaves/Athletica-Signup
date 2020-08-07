@@ -29,7 +29,7 @@ namespace Backend.ClientDtos
 
     [Required]
     [RegularExpression(@"\d{11}")]
-    public string Ssn { get; set; }   
+    public string Ssn { get; set; }
 
   }
 }

@@ -31,7 +31,6 @@ Example response body:
     "learningInstitutionId": null,
     "lockInPeriod": false,
     "monthlyFeeNok": 500,
-    "pdf": "TODO!!!"
   }
 ]
 ```
@@ -105,7 +104,7 @@ Example response body:
     "phoneNumber": "54321234",
     "address": "Norgegata 47, 1814, Askim",
     "brisId": 1,
-    "ssn": "17051453111"
+    "ssn": "17051453158"
   },
   "isMember": false
 }
@@ -129,7 +128,7 @@ Returns 200 OK along with a User object matching the email address. Example resp
   "phoneNumber": "54321234",
   "address": "Norgegata 47, 1814, Askim",
   "brisId": 1,
-  "ssn": "17051453111"
+  "ssn": "17051453158"
 }
 ```
 
@@ -160,7 +159,7 @@ Example request body:
   "email": "mariusgenser@norway.no",
   "phoneNumber": "54321234",
   "address": "Norgegata 47, 1905",
-  "ssn": "17051453111"
+  "ssn": "17051453158"
 }
 ```
 

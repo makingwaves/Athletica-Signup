@@ -63,17 +63,17 @@ namespace Backend
 
     public IDictionary<string, string> GetPostalCodes()
     {
-      try // TODO: remove this
+      try
       {
         string filename = "Postnummerregister-ansi.txt";
         string filepath = _webrootpath == null ? filename : Path.Combine(_webrootpath, filename);
         IEnumerable<string> lines = System.IO.File.ReadLines(filepath);
         return lines.ToDictionary(
           line =>
-            line.Split('\t', 5)[0]
+            line.Split('\t', 2)[0]
         ,
           line =>
-          line.Split('\t', 5)[1]
+          line.Split('\t', 2)[1]
         );
       }
       catch (FileNotFoundException)
