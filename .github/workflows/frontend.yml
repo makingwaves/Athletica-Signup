@@ -1,0 +1,36 @@
+# This is a basic workflow to help you get started with Actions
+name: Frontend Deploy
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://npm.pkg.github.com
+      - name: Install Dependencies
+        run: |
+          pushd ./src/frontend/MembershipSignup
+          npm install
+      - name: Build static site
+        run: |
+          pushd ./src/frontend/MembershipSignup
+          npm run build
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_PATH: ./src/frontend/MembershipSignup/firebase.json  
