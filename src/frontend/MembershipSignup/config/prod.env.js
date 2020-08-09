@@ -1,5 +1,5 @@
 'use strict'
 module.exports = {
   NODE_ENV: '"production"',
-  API_ENDPOINT: '"http://thisisblabla.org/api/"'
+  API_ENDPOINT: '"https://athleticabackend.azurewebsites.net"'
 }
