@@ -63,7 +63,7 @@ namespace Backend
         app.UseDeveloperExceptionPage();
       }
 
-      app.UseCors(options => options.WithOrigins("http://127.0.0.1:5000")
+      app.UseCors(options => options.WithOrigins(Configuration["CorsUrl"])
       .AllowAnyOrigin()
       .AllowAnyMethod()
       .AllowAnyHeader()
