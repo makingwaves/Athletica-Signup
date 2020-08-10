@@ -11,9 +11,4 @@ export default {
 </script>
 
 <style>
-.baseMarketingBox {
-  background-color: #f1f3ff;
-  padding: 32px;
-  margin-bottom: 30px;
-}
 </style>

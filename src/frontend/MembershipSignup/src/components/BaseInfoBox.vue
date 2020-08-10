@@ -25,4 +25,7 @@ export default {
   font-size: 12px;
   margin: 20px auto 20px auto;
 }
+.baseInfoBox img {
+  float: left;
+}
 </style>

@@ -1,8 +1,9 @@
 <template>
   <div class="createMembership">
+    <BaseProgressBar/>
     <div class="membershipChoice">
-      <h6>Velg medlemskap</h6>
-      <b-card-group deck class="cardDeck">
+      <h5>Hva passer deg best?</h5>
+      <b-card-group deck class="cardDeck justify-content-center">
           <b-card v-for="card in cards" :key="card.id" :class="(isChosen(card.id) ? `mb-2 active` : `mb-2 card`)" id="carrd">
               <img id="tick" src="../assets/icons/checkmark.svg" :style="(isChosen(card.id) ? `visibility: visible` : `visibility: hidden`)"/>
               <p class="subtitle2">{{card.getLockInText()}}</p>
@@ -11,45 +12,26 @@
               <BaseButton v-on:BaseButton-clicked="membershipChosen(card.id)" text="Velg" classType="sec"/>
           </b-card>
       </b-card-group>
-      <!-- TODO: Dinne vise før korta e ferdilaga, blir litt lagg i UI. Display litt seinare -->
-      <BaseInfoBox label="Hva er AvtaleGiro? Banken betaler regningen for deg, uten at du trenger å godkjenne først.
-        Du slipper å huske på forfallsdatoer og unngår fakturagebyr.
-        Vi trekker den første hver måned."/>
     </div>
-    <div class="position">
-      <div class="personalia">
-        <PersonaliaForm />
-      </div>
-      <div>
-        <Summary v-if="showSummary">
-          <template #summaryCard>
-
-          </template>
-        </Summary>
-      </div>
-    </div>
+    <router-link to="/personalia">
+      <BaseButton classType="prim" text="Neste"/>
+    </router-link>
+    <BaseInfoBox color="#F1F3FF" label="Frys gir deg mulighet til å sette abonnementet på vent, også i bindingsperioden."/>
   </div>
 </template>
 
 <script>
 import MembershipCard from "@/helpers/MembershipCard.js";
-import PersonaliaForm from "@/components/PersonaliaForm.vue";
-import Summary from "@/components/Summary.vue";
 import repo from "@/api/httpFactory";
 
 export default {
   name: "MembershipPage",
   props: ["selected"],
-  components: {
-    PersonaliaForm,
-    Summary
-  },
   data() {
     return {
       cards: [],
       chosenCard: 1,
       contractsByInst: [],
-      showSummary: false,
     };
   },
   created() {
@@ -58,10 +40,6 @@ export default {
     this.getContracts(this.createCardsFromContract);
   },
   methods: {
-    timeForSummary() {
-      showSummary: true;
-      console.log("TIME FOR SUMMARY")
-    },
     isChosen(cardid) {
       return cardid === this.chosenCard;
     },
@@ -69,10 +47,11 @@ export default {
       this.chosenCard = null;
       this.chosenCard = card;
       console.log(this.chosenCard)
+      this.$store.dispatch("saveChosenContractId", this.chosenCard);
     },
     getContracts(callback) {
       const Contracts = repo.get("contracts");
-      Contracts.getContractsByLearningInst(this.selected.id).then(response => {
+      Contracts.getContractsByLearningInst(this.$store.getters.getSelectedLearningInst).then(response => {
         this.contractsByInst = response.data;
         callback();
       });
@@ -84,10 +63,10 @@ export default {
         let lockInText;
         let infoText;
         if (element.lockInPeriod === 0) {
-          lockInText = "MED BINDING";
+          lockInText = "SUPERSPAR";
           infoText = ["12 måneder bindingstid med AvtaleGiro", "Frys opp til 2 måneder det første året", "Du sparer 612,- over et år", "AvtaleGiro"];
         } else if (element.lockInPeriod === 1) {
-          lockInText = "UTEN BINDING";
+          lockInText = "FLEXI";
           infoText = ["Ingen binding", "Frys opp til 1 måned per år", "AvtaleGiro"];
         }
         var card = new MembershipCard(
@@ -99,29 +78,13 @@ export default {
         this.cards.push(card);
       });
     }
-  },
-  computed: {
-    getInfoTexts: function() {
-      var texts = [];
-      for(var i = 0; i < this.cards.length; i++){
-        for(var k = 0; k < this.cards[i].length; k++){
-          texts.push(this.cards[i][k].infoText);
-        }
-      }
-      return texts;
-    },
-  },
-  watch: {
-    chosenCard: function(val) {
-            this.membershipChosen;
-        }
   }
 };
 </script>
 
 <style>
 .cardDeck {
-  text-align: center;
+  margin: auto;
 }
 
 .card {
@@ -129,11 +92,12 @@ export default {
   border: 1px solid #FFB0A7;
   box-sizing: border-box;
   border-radius: 10px;
+  background-color: transparent;
 }
 
 .active {
   max-width: 18rem;
-  background-color: #61177B;
+  background-color: #61177B !important;
   color: WHITE;
   box-sizing: border-box;
   border-radius: 10px;

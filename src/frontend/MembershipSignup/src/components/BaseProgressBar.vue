@@ -10,6 +10,7 @@
 <script>
 export default {
     name: "BaseProgressBar",
+    // TODO: Legg inn prop som bestemmer aktiv ting
     data() {
         return {
             progress: [
@@ -25,7 +26,7 @@ export default {
                 },
                 {
                     step: 3,
-                    text: "Betaling og AvtaleGiro",
+                    text: "Betaling",
                     src: require("../assets/icons/3_inactive.svg")
                 },
                 {
@@ -48,7 +49,7 @@ export default {
   width: 80%;
   margin: 20px auto 40px auto;
   display: grid;
-  grid-template-columns: 20% 20% 20% 20% 20%;
+  grid-template-columns: 25% 25% 25% 25%;
   grid-gap: 15px;
   z-index:9999;
   text-align: center;
