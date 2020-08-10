@@ -158,7 +158,7 @@ Example request body:
   "learningInstitutionId": 1,
   "email": "mariusgenser@norway.no",
   "phoneNumber": "54321234",
-  "address": "Norgegata 47, 1905",
+  "address": "Norgegata 47, 1814, Askim",
   "ssn": "17051453158"
 }
 ```
