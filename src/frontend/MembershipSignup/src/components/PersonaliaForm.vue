@@ -28,7 +28,7 @@
                                     <p>Du har SiO-bruker, logg inn for å opprette medlemskap hos Athletica.</p>
                                 </div>
                                 <label>E-post</label>
-                                <p><b>karolinevberge@gmail.com</b></p>
+                                <b-form-input v-model="email"><b></b></b-form-input>
                                 <b-form-group label="Passord">
                                     <b-form-input type="password"></b-form-input>
                                 </b-form-group>
@@ -57,16 +57,16 @@
                 <b-form-group label="E-post">
                     <b-form-input id="emailAddress" v-model="email" @blur="emailValidation"></b-form-input>
                 </b-form-group>
-                <!-- <b-form-group label="Fødselsnummer">
+                <b-form-group label="Fødselsnummer">
                     <b-form-input id="ssn" placeholder="11 siffer" v-model="socSecNum" @blur="saveSsn"></b-form-input>
-                </b-form-group> -->
+                </b-form-group>
                 <BaseInfoBox color="#FFEF9E" label="Sjekk at opplysningene stemmer."/>
                 <div class="offerBox">
                     <img src="../assets/icons/checkmark.svg" />
                     <p>Flott! Du har betalt semesteravgift, og kan få studentpriser.</p>
                 </div>
                 <router-link to="/summary">
-                    <BaseButton classType="prim" text="Neste"/>
+                    <BaseButton classType="prim" v-on:BaseButton-clicked="createUser" text="Neste"/>
                 </router-link>
             </template>
         </PersonaliaNewUser>
@@ -80,6 +80,7 @@ import PersonaliaUserExists from '@/components/PersonaliaUserExists.vue'
 import PersonaliaNewUser from '@/components/PersonaliaNewUser.vue'
 import store from '../store/store'
 import UsersApi from '@/api/users.api'
+import repo from "@/api/httpFactory";
 
 export default {
     name: 'Personalia',
@@ -108,22 +109,28 @@ export default {
         showModal() {
         this.$refs['my-modal'].show()
         },
-        hideModal() {
-            this.loading = true;
-            setTimeout(() => {
-                this.$refs['my-modal'].hide()
-                this.blabla = true;
-                document.getElementById("streetAddress").value = this.existingUser.user.address;
-                document.getElementById("postalCode").value = this.existingUser.user.address;
-                document.getElementById("emailAddress").value = this.existingUser.user.email;
-                document.getElementById("ssn").value = this.existingUser.user.ssn;
+            hideModal() {
+                this.loading = true;
+                setTimeout(() => {
+                    this.$refs["my-modal"].hide();
+                    this.blabla = true;
+                    this.name = `${this.existingUser.user.firstName} ${this.existingUser.user.lastName}`;
+                    this.email = this.existingUser.user.email;
+                    let addressSlots = this.existingUser.user.address.split(/\,\s*/);
+                    console.log(addressSlots);
+                    this.street = addressSlots[0];
+                    this.postal = addressSlots[1];
+                    this.postalCity = addressSlots[2];
+                    this.socSecNum = this.existingUser.user.ssn;
                 }, 2000);
-        },
+            },
         checkUserByNumber(userNum) {
 
             UsersApi.getUserByNumber(userNum).then((response) => {
                 try {
                     this.existingUser = response.data;
+                    this.$store.dispatch('saveUser', this.existingUser.user)
+                    this.email = this.existingUser.user.email
                     this.checkingUser = true;
                     setTimeout(() => {
                         this.checkingUser = false;
@@ -255,7 +262,23 @@ export default {
             });
             todayFormatted = todayFormatted.concat(list[0], list[1], list[2]);
             this.$store.dispatch('saveTodaysDate', todayFormatted);
-        }
+        },
+        createUser() {
+            var user = this.$store.getters.getUserData;
+            const Users = repo.get("users");
+            Users.postUser(user.firstName, user.lastName, user.learningInstitutionId, 
+            user.email, user.phoneNumber, user.address, user.ssn).then((response) => {
+                try {
+                    this.response = response.data;
+                    console.log(this.response)
+                    console.log("HELLOO")
+                } catch(e) {}
+                }).catch((error) => {
+                try {
+                    console.log(error.response.data);
+                } catch(e) {}
+            })
+        },
     },
     computed: {
     numberValidation: function () {

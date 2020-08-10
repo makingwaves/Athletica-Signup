@@ -70,6 +70,9 @@ export const store = new Vuex.Store( {
         },
         SAVE_TODAYS_DATE(state, date) {
             state.today = date;
+        },
+        SAVE_EXISTING_USER(state, user) {
+            state.user = user;
         }
     },
     modules,
@@ -103,6 +106,15 @@ export const store = new Vuex.Store( {
         },
         saveTodaysDate({commit}, date) {
             commit('SAVE_TODAYS_DATE', date);
+        },
+        saveUser({ commit }, user) {
+            commit("SAVE_FIRST_NAME", user.firstName);
+            commit("SAVE_LAST_NAME", user.lastName);
+            commit("SAVE_EMAIL_ADDRESS", user.email);
+            commit("SAVE_ADDRESS", user.address);
+            commit("SAVE_SSN", user.ssn);
+            commit("SAVE_PHONE_NUMBER", user.phoneNumber);
+            commit("SAVE_CHOSEN_LEARNINGINST", user.learningInstitutionId);
         }
     }
 })
