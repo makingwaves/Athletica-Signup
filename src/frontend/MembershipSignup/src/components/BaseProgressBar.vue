@@ -10,7 +10,7 @@
 <script>
 export default {
     name: "BaseProgressBar",
-    // TODO: Legg inn prop som bestemmer aktiv ting
+    props: ['active'],
     data() {
         return {
             progress: [
@@ -36,7 +36,8 @@ export default {
                 },
             ]
         }
-    }
+    },
+
 }
 </script>
 
