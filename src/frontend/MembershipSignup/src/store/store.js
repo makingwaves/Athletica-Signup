@@ -35,6 +35,9 @@ export const store = new Vuex.Store( {
     getters: {
         getUserData: state => {
             return state.user;
+        },
+        getSelectedLearningInst: state => {
+            return state.user.learningInstitutionId;
         }
     },
     mutations: {

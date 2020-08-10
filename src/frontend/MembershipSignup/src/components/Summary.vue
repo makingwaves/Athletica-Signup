@@ -1,6 +1,6 @@
 <template>
     <div class="summary">
-        <h6>Oppsummering og betaling</h6>
+        <h5>Oppsummering og betaling</h5>
         <slot name="summaryCard"></slot>
         <BaseButton v-on:BaseButton-clicked="createUser" text="Opprett bruker" classType="prim"/>
     </div>

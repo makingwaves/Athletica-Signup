@@ -1,14 +1,19 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import StartPage from '@/pages/StartPage'
+import StudentChoicePage from '@/pages/StudentChoicePage'
 import InstitutionPage from '@/pages/InstitutionPage'
 import MembershipPage from '@/pages/MembershipPage'
-import PaymentPage from '@/pages/PaymentPage'
+import PersonaliaForm from '@/components/PersonaliaForm'
+import SummaryPage from '@/pages/SummaryPage'
 import EndPage from '@/pages/EndPage'
 
 Vue.use(Router)
 
 export default new Router({
+  scrollBehavior() {
+    return { x: 0, y: 0 };
+  },
   routes: [
     {
       path: '/',
@@ -16,19 +21,29 @@ export default new Router({
       component: StartPage
     },
     {
+      path: '/student',
+      name: 'StudentChoicePage',
+      component: StudentChoicePage
+    },
+    {
       path: '/inst',
       name: 'InstitutionPage',
       component: InstitutionPage
     },
     {
-      path: '/form',
+      path: '/membership',
       name: 'MembershipPage',
       component: MembershipPage
     },
     {
-      path: '/pay',
-      name: 'PaymentPage',
-      component: PaymentPage
+      path: '/personalia',
+      name: 'PersonaliaForm',
+      component: PersonaliaForm
+    },
+    {
+      path: '/summary',
+      name: 'SummaryPage',
+      component: SummaryPage
     },
     {
       path: '/end',

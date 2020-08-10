@@ -1,54 +1,33 @@
 <template>
   <div class="startpage">
-    <BaseMarketingBox>
-      <template #content>
-        <h2>{{ marketingHeadline }}</h2>
-        <p>Et medlemskap hos Athletica gir deg tilgang til:</p>
-        <div class="wrapper">
-          <div class="offerBox" v-for="offer in offers" v-bind:key="offer.id">
-            <img :src="offer.src" />
-            <div>{{ offer.text }}</div>
-          </div>
-        </div>
-      </template>
-    </BaseMarketingBox>
-    <div>
-      <h5>{{ headline }}</h5>
-      <div class="studentChoiceButtons">
-        <router-link to="/inst">
-          <BaseButton classType="prim" v-on:BaseButton-clicked="studentOrNot(true)" text="Jeg er student" />
-        </router-link>
-        <br />
-        <BaseButton classType="prim" v-on:BaseButton-clicked="studentOrNot(false)" text="Jeg er ikke student" />
+    <img id="swimmers" src="../assets/pics/swimmers.png"/>
+    <h5>{{ marketingHeadline }}</h5>
+    <div class="wrapper">
+      <div class="offerBox" v-for="offer in offers" v-bind:key="offer.id">
+        <img :src="offer.src" />
+        <div>{{ offer.text }}</div>
       </div>
-      <BaseInfoBox
-        color="#FFEF9E"
-        label="If you do not have a Norwegian bank account, please go to the reception in order to sign up."
-      />
     </div>
-    <div>
-      <InstitutionPage v-if="isStudent" />
-      <MembershipPage v-if="isStudent===false" />
-    </div>
+    <router-link to="/student">
+      <BaseButton classType="prim" :text="headline" />
+    </router-link>
   </div>
 </template>
 
 <script>
-import InstitutionPage from "@/pages/InstitutionPage.vue";
-import MembershipPage from "@/pages/MembershipPage.vue";
+import StudentChoicePage from "@/pages/StudentChoicePage.vue";
+
 import store from "../store/store";
 
 export default {
   name: "StartPage",
   components: {
-    InstitutionPage,
-    MembershipPage
+    StudentChoicePage
   },
   data() {
     return {
-      marketingHeadline: "Treningsklar?",
-      headline: "Bli medlem her",
-      isStudent: null,
+      marketingHeadline: "Treningsklar? Kom i gang i dag!",
+      headline: "Bli medlem",
       offers: [
         {
           id: 1,
@@ -83,20 +62,14 @@ export default {
       ]
     };
   },
-  methods: {
-    studentOrNot(answer) {
-      this.isStudent = answer;
-      this.$store.dispatch("saveStudentChoice", this.isStudent);
-    }
-  }
 };
 </script>
 
 <style>
-.startpage {
-  text-align: center;
+.wrapper {
+  margin: 40px auto 40px auto;
 }
-.studentChoiceButtons {
-  margin: 30px;
+#swimmers {
+  width: 100%;
 }
 </style>

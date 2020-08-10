@@ -1,6 +1,7 @@
 <template>
     <div class="checkInput">
-        <h6>Personalia</h6>
+        <BaseProgressBar/>
+        <h5>Hvem er du?</h5>
         <div class="inputField" v-bind:class="numberValidation">
         <b-form-group label="Fullt navn">
             <b-form-input id="fullName" v-model="name" @blur="nameValidation"></b-form-input>
@@ -13,36 +14,39 @@
         <div v-bind:class="ssnValidation">
         <PersonaliaUserExists v-if="existingUser">
             <template #hasuser>
-                <BaseInfoBox label="Det kan se ut som en SiO-bruker med dette telefonnummeret allerede er registrert. Logg inn for å autofylle informasjonen din." color="#FFEF9E"/>
                 <div>
-                    <BaseButton classType="prim" id="show-btn" v-on:BaseButton-clicked="showModal" text="Logg inn"/>
+                    <div v-if="checkingUser">
+                        <b-spinner variant="primary" label="Text Centered"></b-spinner>
+                        <p>Sjekker om du har SiO-bruker...</p>
+                    </div>
+                    <div>
 
-                    <b-modal id="modal-center" ref="my-modal" hide-footer centered>
-                        <template v-slot:modal-header="{}">
-                            <h5>Logg inn på SiO.no</h5>
-                        </template>
-                        <template v-slot:default="{}">
-                            <b-form-group label="E-post">
-                                <b-form-input id="emailAddress" v-model="email" @blur="emailValidation"></b-form-input>
-                            </b-form-group>
-                            <b-form-group label="Passord">
-                                <b-form-input type="password"></b-form-input>
-                            </b-form-group>
-                            <BaseButton classType="prim" v-on:BaseButton-clicked="hideModal" text="Logg inn"/>
-                            <div class="text-center" v-if="loading">
-                                <b-spinner variant="primary" label="Text Centered"></b-spinner>
-                            </div>
-                        </template>     
-                    </b-modal>
+                        <b-modal id="modal-center" ref="my-modal" hide-footer centered>
+                            <template v-slot:default="{}">
+                                <div>
+                                    <h5 style="margin: 15px">Logg inn</h5>
+                                    <p>Du har SiO-bruker, logg inn for å opprette medlemskap hos Athletica.</p>
+                                </div>
+                                <label>E-post</label>
+                                <p><b>karolinevberge@gmail.com</b></p>
+                                <b-form-group label="Passord">
+                                    <b-form-input type="password"></b-form-input>
+                                </b-form-group>
+                                <BaseButton classType="prim" v-on:BaseButton-clicked="hideModal" text="Logg inn"/>
+                                <br>
+                                <p><u>Jeg har glemt passordet</u></p>
+                                <div class="text-center" v-if="loading">
+                                    <b-spinner variant="primary" label="Text Centered"></b-spinner>
+                                </div>
+                            </template>     
+                        </b-modal>
+                    </div>
                 </div>
             </template>
         </PersonaliaUserExists>
 
-        <PersonaliaNewUser v-if="existingUser === false">
+        <PersonaliaNewUser class="inputField" v-if="blabla === true">
             <template #newuser>
-                <BaseInfoBox label="Du trenger SiO-bruker for å trene hos Athletica.
-                Ved å opprette SiO-bruker kan du få studentpriser på medlemskapet ditt." />
-                <h6 id="registerSIO">Registrer SiO-bruker</h6>
                 <b-form-group label="Gatenavn og nummer">
                     <b-form-input id="streetAddress" placeholder="Eksempel: Gatenavn 24" v-model="street" @blur="streetValidation"></b-form-input>
                 </b-form-group>
@@ -53,14 +57,17 @@
                 <b-form-group label="E-post">
                     <b-form-input id="emailAddress" v-model="email" @blur="emailValidation"></b-form-input>
                 </b-form-group>
-                <b-form-group label="Fødselsnummer">
-                    <BaseInfoBox label="Vi bruker fødselsnummeret ditt for å sjekke at du har betalt semesteravgift"/>
+                <!-- <b-form-group label="Fødselsnummer">
                     <b-form-input id="ssn" placeholder="11 siffer" v-model="socSecNum" @blur="saveSsn"></b-form-input>
-                </b-form-group>
-                <!-- This doesn't work -->
-                <BaseInfoBox v-if="lastFeePaidThisSemester === false"
-                label="Vi fant ingen SiO-bruker med disse opplysningene. En SiO-bruker vil bli opptrettet 
-                automatisk slik at du kan benytte deg av SiO-tjenester." color="#FFEF9E"/>
+                </b-form-group> -->
+                <BaseInfoBox color="#FFEF9E" label="Sjekk at opplysningene stemmer."/>
+                <div class="offerBox">
+                    <img src="../assets/icons/checkmark.svg" />
+                    <p>Flott! Du har betalt semesteravgift, og kan få studentpriser.</p>
+                </div>
+                <router-link to="/summary">
+                    <BaseButton classType="prim" text="Neste"/>
+                </router-link>
             </template>
         </PersonaliaNewUser>
         </div>
@@ -89,6 +96,8 @@ export default {
             address: "",
             lastFeePaidThisSemester: null,
             loading: false,
+            checkingUser: null,
+            blabla: false
         }
     },
     components: {
@@ -103,21 +112,28 @@ export default {
             this.loading = true;
             setTimeout(() => {
                 this.$refs['my-modal'].hide()
+                this.blabla = true;
+                document.getElementById("streetAddress").value = this.existingUser.user.address;
+                document.getElementById("postalCode").value = this.existingUser.user.address;
+                document.getElementById("emailAddress").value = this.existingUser.user.email;
+                document.getElementById("ssn").value = this.existingUser.user.ssn;
                 }, 2000);
         },
         checkUserByNumber(userNum) {
+
             UsersApi.getUserByNumber(userNum).then((response) => {
                 try {
                     this.existingUser = response.data;
-                    document.getElementById("streetAddress").value = this.existingUser.address;
-                    document.getElementById("postalCode").value = this.existingUser.address;
-                    document.getElementById("emailAddress").value = this.existingUser.email;
-                    document.getElementById("ssn").value = this.existingUser.ssn;
+                    this.checkingUser = true;
+                    setTimeout(() => {
+                        this.checkingUser = false;
+                        }, 3000);
                 } catch(e) {}
                 }).catch((error) => {
                 try {
                     console.log(error.response.data);
                     this.existingUser = false;
+                    this.blabla = true;
                     document.getElementById("streetAddress").value = "";
                     document.getElementById("postalCode").value = "";
                     document.getElementById("emailAddress").value = "";
@@ -263,6 +279,13 @@ export default {
         }
     }
   },
+  watch: {
+        checkingUser: function(val) {
+            if(this.checkingUser === false) {
+                this.showModal()
+            }
+        }
+    }
 }
 </script>
 
