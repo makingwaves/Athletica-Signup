@@ -159,6 +159,7 @@ Example request body:
   "email": "mariusgenser@norway.no",
   "phoneNumber": "54321234",
   "address": "Norgegata 47, 1814, Askim",
+<<<<<<< HEAD
   "ssn": "17051453158"
 }
 ```
@@ -175,6 +176,8 @@ PUT api/signup/users/{id}
   "email": "mariusgenser@norway.no",
   "phoneNumber": "54321234",
   "address": "Norgegata 47, 1905",
+=======
+>>>>>>> f297a0586587d7e275c329c97be33ee98d543819
   "ssn": "17051453158"
 }
 ```

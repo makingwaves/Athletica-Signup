@@ -1,14 +1,14 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import StartPage from '@/pages/StartPage'
-import StudentChoicePage from '@/pages/StudentChoicePage'
-import InstitutionPage from '@/pages/InstitutionPage'
-import MembershipPage from '@/pages/MembershipPage'
-import PersonaliaPage from '@/pages/PersonaliaPage'
-import SummaryPage from '@/pages/SummaryPage'
-import EndPage from '@/pages/EndPage'
+import Vue from "vue";
+import Router from "vue-router";
+import StartPage from "@/pages/StartPage";
+import StudentChoicePage from "@/pages/StudentChoicePage";
+import InstitutionPage from "@/pages/InstitutionPage";
+import MembershipPage from "@/pages/MembershipPage";
+import PersonaliaPage from "@/pages/PersonaliaPage";
+import SummaryPage from "@/pages/SummaryPage";
+import EndPage from "@/pages/EndPage";
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   scrollBehavior() {
@@ -16,39 +16,39 @@ export default new Router({
   },
   routes: [
     {
-      path: '/',
-      name: 'StartPage',
+      path: "/",
+      name: "StartPage",
       component: StartPage
     },
     {
-      path: '/student',
-      name: 'StudentChoicePage',
+      path: "/student",
+      name: "StudentChoicePage",
       component: StudentChoicePage
     },
     {
-      path: '/inst',
-      name: 'InstitutionPage',
+      path: "/inst",
+      name: "InstitutionPage",
       component: InstitutionPage
     },
     {
-      path: '/membership',
-      name: 'MembershipPage',
+      path: "/membership",
+      name: "MembershipPage",
       component: MembershipPage
     },
     {
-      path: '/personalia',
-      name: 'PersonaliaPage',
+      path: "/personalia",
+      name: "PersonaliaPage",
       component: PersonaliaPage
     },
     {
-      path: '/summary',
-      name: 'SummaryPage',
+      path: "/summary",
+      name: "SummaryPage",
       component: SummaryPage
     },
     {
-      path: '/end',
-      name: 'EndPage',
+      path: "/end",
+      name: "EndPage",
       component: EndPage
     }
   ]
-})
+});
