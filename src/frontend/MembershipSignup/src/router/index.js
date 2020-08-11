@@ -4,7 +4,7 @@ import StartPage from '@/pages/StartPage'
 import StudentChoicePage from '@/pages/StudentChoicePage'
 import InstitutionPage from '@/pages/InstitutionPage'
 import MembershipPage from '@/pages/MembershipPage'
-import PersonaliaForm from '@/components/PersonaliaForm'
+import PersonaliaPage from '@/pages/PersonaliaPage'
 import SummaryPage from '@/pages/SummaryPage'
 import EndPage from '@/pages/EndPage'
 
@@ -37,8 +37,8 @@ export default new Router({
     },
     {
       path: '/personalia',
-      name: 'PersonaliaForm',
-      component: PersonaliaForm
+      name: 'PersonaliaPage',
+      component: PersonaliaPage
     },
     {
       path: '/summary',

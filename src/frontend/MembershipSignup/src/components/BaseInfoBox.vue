@@ -1,7 +1,8 @@
 <template>
   <div class="baseInfoBox" :style="{'background-color': color}">
-    <img src="../assets/icons/info.svg"/>
+    <img v-if="color === '#FFEF9E'" src="../assets/icons/info.svg"/>
     <p>{{ label }}</p>
+    <slot name="content" />
   </div>
 </template>
 

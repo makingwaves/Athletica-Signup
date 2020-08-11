@@ -10,7 +10,6 @@
                 </template>
                 <b-form-select-option :value="inst" v-for="inst in learningInsts" v-bind:key="inst.name">{{inst.name}}</b-form-select-option>
             </b-form-select>
-            <!-- <MembershipPage v-if="selected" :key="selected.id" :selected="selected"/> -->
         </div>
         <router-link to="/membership">
             <BaseButton classType="prim" v-if="selected" :selected="selected" text="Neste"/>

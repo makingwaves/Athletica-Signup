@@ -3,49 +3,24 @@
         <BaseProgressBar/>
         <h5>Hvem er du?</h5>
         <div class="inputField" v-bind:class="numberValidation">
-        <b-form-group label="Fullt navn">
-            <b-form-input id="fullName" v-model="name" @blur="nameValidation"></b-form-input>
-        </b-form-group>
-        <b-form-group class="short" label="Telefonnummer">
-            <b-form-input id="phoneNumber" placeholder="8 siffer" v-model="number" @blur="saveNumber"></b-form-input>
-        </b-form-group>
+            <b-form-group label="Fullt navn">
+                <b-form-input id="fullName" v-model="name" @blur="nameValidation"></b-form-input>
+            </b-form-group>
+            <b-form-group class="short" label="Telefonnummer">
+                <b-form-input id="phoneNumber" placeholder="8 siffer" v-model="number" @blur="saveNumber"></b-form-input>
+            </b-form-group>
+            <div v-if="checkingUser">
+                <b-spinner variant="primary" label="Text Centered"></b-spinner>
+                <p>Sjekker om du har SiO-bruker...</p>
+            </div>
         </div>
-
-        <div v-bind:class="ssnValidation">
         <PersonaliaUserExists v-if="existingUser">
             <template #hasuser>
-                <div>
-                    <div v-if="checkingUser">
-                        <b-spinner variant="primary" label="Text Centered"></b-spinner>
-                        <p>Sjekker om du har SiO-bruker...</p>
-                    </div>
-                    <div>
-
-                        <b-modal id="modal-center" ref="my-modal" hide-footer centered>
-                            <template v-slot:default="{}">
-                                <div>
-                                    <h5 style="margin: 15px">Logg inn</h5>
-                                    <p>Du har SiO-bruker, logg inn for å opprette medlemskap hos Athletica.</p>
-                                </div>
-                                <label>E-post</label>
-                                <b-form-input v-model="email"><b></b></b-form-input>
-                                <b-form-group label="Passord">
-                                    <b-form-input type="password"></b-form-input>
-                                </b-form-group>
-                                <BaseButton classType="prim" v-on:BaseButton-clicked="hideModal" text="Logg inn"/>
-                                <br>
-                                <p><u>Jeg har glemt passordet</u></p>
-                                <div class="text-center" v-if="loading">
-                                    <b-spinner variant="primary" label="Text Centered"></b-spinner>
-                                </div>
-                            </template>     
-                        </b-modal>
-                    </div>
-                </div>
+                <BaseModal ref="login-modal" :email="email" :modalClosed="modalClosed"/>
             </template>
         </PersonaliaUserExists>
 
-        <PersonaliaNewUser class="inputField" v-if="blabla === true">
+        <PersonaliaNewUser class="inputField" v-if="checkingUser === false && afterModal === true">
             <template #newuser>
                 <b-form-group label="Gatenavn og nummer">
                     <b-form-input id="streetAddress" placeholder="Eksempel: Gatenavn 24" v-model="street" @blur="streetValidation"></b-form-input>
@@ -57,8 +32,8 @@
                 <b-form-group label="E-post">
                     <b-form-input id="emailAddress" v-model="email" @blur="emailValidation"></b-form-input>
                 </b-form-group>
-                <b-form-group label="Fødselsnummer">
-                    <b-form-input id="ssn" placeholder="11 siffer" v-model="socSecNum" @blur="saveSsn"></b-form-input>
+                <b-form-group label="Fødselsnummer" :class="ssnValidation" v-if="existingUser === false">
+                    <b-form-input id="ssn" placeholder="11 siffer" v-model="ssn" @blur="saveSsn"></b-form-input>
                 </b-form-group>
                 <BaseInfoBox color="#FFEF9E" label="Sjekk at opplysningene stemmer."/>
                 <div class="offerBox">
@@ -70,8 +45,6 @@
                 </router-link>
             </template>
         </PersonaliaNewUser>
-        </div>
-
     </div>
 </template>
 
@@ -83,7 +56,7 @@ import UsersApi from '@/api/users.api'
 import repo from "@/api/httpFactory";
 
 export default {
-    name: 'Personalia',
+    name: 'PersonaliaPage',
     data() {
         return {
             name: "",
@@ -92,13 +65,13 @@ export default {
             email: "",
             postal: "",
             postalCity: "",
-            socSecNum: "",
+            ssn: "",
             existingUser: null,
             address: "",
             lastFeePaidThisSemester: null,
             loading: false,
             checkingUser: null,
-            blabla: false
+            afterModal: false
         }
     },
     components: {
@@ -107,52 +80,33 @@ export default {
     },
     methods: {
         showModal() {
-        this.$refs['my-modal'].show()
+            this.$refs['login-modal'].showModal()
         },
-            hideModal() {
-                this.loading = true;
-                setTimeout(() => {
-                    this.$refs["my-modal"].hide();
-                    this.blabla = true;
-                    this.name = `${this.existingUser.user.firstName} ${this.existingUser.user.lastName}`;
-                    this.email = this.existingUser.user.email;
-                    let addressSlots = this.existingUser.user.address.split(/\,\s*/);
-                    console.log(addressSlots);
-                    this.street = addressSlots[0];
-                    this.postal = addressSlots[1];
-                    this.postalCity = addressSlots[2];
-                    this.socSecNum = this.existingUser.user.ssn;
-                }, 2000);
-            },
         checkUserByNumber(userNum) {
-
+            this.checkingUser = true;
             UsersApi.getUserByNumber(userNum).then((response) => {
                 try {
                     this.existingUser = response.data;
                     this.$store.dispatch('saveUser', this.existingUser.user)
                     this.email = this.existingUser.user.email
-                    this.checkingUser = true;
                     setTimeout(() => {
                         this.checkingUser = false;
-                        }, 3000);
+                        }, 2000);
                 } catch(e) {}
                 }).catch((error) => {
                 try {
                     console.log(error.response.data);
                     this.existingUser = false;
-                    this.blabla = true;
-                    document.getElementById("streetAddress").value = "";
-                    document.getElementById("postalCode").value = "";
-                    document.getElementById("emailAddress").value = "";
-                    document.getElementById("ssn").value = "";
-                } catch(e) {}
+                    this.afterModal = true;
+                    this.street = "";
+                    this.postal = "";
+                    this.email = "";
+                    this.ssn = "";
+                    setTimeout(() => {
+                        this.checkingUser = false;
+                    }, 2000);
+                } catch(e) {console.log("HEI IDA")}
             });
-            var regScroll = document.getElementById("registerSIO");
-            /*this.$smoothScroll({
-                scrollTo: regScroll,
-                duration: 1500,
-                offset: -50,
-                })*/
         },
         checkStudentFeeBySsn(ssn) {
             UsersApi.getStudentFeeBySsn(ssn).then((response) => {
@@ -248,7 +202,7 @@ export default {
             this.$store.dispatch('savePhoneNumber', this.number)
         },
         saveSsn() {
-            this.$store.dispatch('saveSsn', this.socSecNum);
+            this.$store.dispatch('saveSsn', this.ssn);
             this.$emit('timeForSummary');
         },
         formatToday(today) {
@@ -279,6 +233,16 @@ export default {
                 } catch(e) {}
             })
         },
+        modalClosed() {
+            this.name = `${this.existingUser.user.firstName} ${this.existingUser.user.lastName}`;
+            this.email = this.existingUser.user.email;
+            let addressSlots = this.existingUser.user.address.split(/\,\s*/);
+            console.log(addressSlots);
+            this.street = addressSlots[0];
+            this.postal = addressSlots[1];
+            this.postalCity = addressSlots[2];
+            this.afterModal = true;
+        }
     },
     computed: {
     numberValidation: function () {
@@ -286,15 +250,15 @@ export default {
           console.log("Valid phone number")
           this.checkUserByNumber(this.number);
         return 'valid';
-      } else {
+      } else if (this.number.length > 0){
           console.log("Invalid phone number")
-        return 'invalid';
+          return 'invalid';
       }
     },
     ssnValidation: function () {
-        if (this.socSecNum.length === 11) {
+        if (this.ssn.length === 11) {
             console.log("Valid ssn");
-            this.checkStudentFeeBySsn(this.socSecNum);
+            this.checkStudentFeeBySsn(this.ssn);
             return 'valid';
         } else {
             console.log("Invalid ssn");
@@ -304,7 +268,8 @@ export default {
   },
   watch: {
         checkingUser: function(val) {
-            if(this.checkingUser === false) {
+            if(this.checkingUser === false && this.existingUser) {
+                this.afterModal = false;
                 this.showModal()
             }
         }

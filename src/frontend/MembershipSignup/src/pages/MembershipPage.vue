@@ -4,17 +4,21 @@
     <div class="membershipChoice">
       <h5>Hva passer deg best?</h5>
       <b-card-group deck class="cardDeck justify-content-center">
-          <b-card v-for="card in cards" :key="card.id" :class="(isChosen(card.id) ? `mb-2 active` : `mb-2 card`)" id="carrd">
-              <img id="tick" src="../assets/icons/checkmark.svg" :style="(isChosen(card.id) ? `visibility: visible` : `visibility: hidden`)"/>
+          <b-card v-for="card in cards" :key="card.id" :class="(isChosen(card.id) ? `mb-2 active` : `mb-2 card`)" @click="chosenCard = card.id">
+              <b-form-radio name="radio-size" v-model="chosenCard" size="lg" :value="card.id"></b-form-radio>
               <p class="subtitle2">{{card.getLockInText()}}</p>
               <h4>{{card.getPrice()}},-</h4>
               <p>/måned</p>
-              <BaseButton v-on:BaseButton-clicked="membershipChosen(card.id)" text="Velg" classType="sec"/>
+              <div :key="s.id" v-for="s in card.getInfoSentence()">
+                <img v-if="isChosen(card.id)" id="check" src="../assets/icons/check_white.svg"/>
+                <img v-else id="check" src="../assets/icons/check_black.svg"/>
+                <div>{{s}}</div>
+              </div>
           </b-card>
       </b-card-group>
     </div>
     <router-link to="/personalia">
-      <BaseButton classType="prim" text="Neste"/>
+      <BaseButton classType="prim" text="Neste" v-on:BaseButton-clicked="membershipChosen()"/>
     </router-link>
     <BaseInfoBox color="#F1F3FF" label="Frys gir deg mulighet til å sette abonnementet på vent, også i bindingsperioden."/>
   </div>
@@ -30,7 +34,7 @@ export default {
   data() {
     return {
       cards: [],
-      chosenCard: 1,
+      chosenCard: 0,
       contractsByInst: [],
     };
   },
@@ -43,10 +47,7 @@ export default {
     isChosen(cardid) {
       return cardid === this.chosenCard;
     },
-    membershipChosen(card) {
-      this.chosenCard = null;
-      this.chosenCard = card;
-      console.log(this.chosenCard)
+    membershipChosen() {
       this.$store.dispatch("saveChosenContractId", this.chosenCard);
     },
     getContracts(callback) {
@@ -64,19 +65,20 @@ export default {
         let infoText;
         if (element.lockInPeriod === 0) {
           lockInText = "SUPERSPAR";
-          infoText = ["12 måneder bindingstid med AvtaleGiro", "Frys opp til 2 måneder det første året", "Du sparer 612,- over et år", "AvtaleGiro"];
+          infoText = ["12 måneder bindingstid", "Frys i opptil 2 måneder"];
         } else if (element.lockInPeriod === 1) {
           lockInText = "FLEXI";
-          infoText = ["Ingen binding", "Frys opp til 1 måned per år", "AvtaleGiro"];
+          infoText = ["Ingen bindingstid", "Frys i opptil 1 måned"];
         }
         var card = new MembershipCard(
-          element.id,
+          element.lockInPeriod,
           lockInText,
           fee,
           infoText,
         );
         this.cards.push(card);
       });
+      this.cards.sort((a, b) => a.id - b.id)
     }
   }
 };
@@ -93,6 +95,10 @@ export default {
   box-sizing: border-box;
   border-radius: 10px;
   background-color: transparent;
+}
+
+#check {
+  float:left;
 }
 
 .active {
