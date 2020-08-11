@@ -1,26 +1,38 @@
 <template>
   <div class="createMembership">
-    <BaseProgressBar/>
+    <BaseProgressBar />
     <div class="membershipChoice">
       <h5>Hva passer deg best?</h5>
       <b-card-group deck class="cardDeck justify-content-center">
-          <b-card v-for="card in cards" :key="card.id" :class="(isChosen(card.id) ? `mb-2 active` : `mb-2 card`)" @click="chosenCard = card.id">
-              <b-form-radio name="radio-size" v-model="chosenCard" size="lg" :value="card.id"></b-form-radio>
-              <p class="subtitle2">{{card.getLockInText()}}</p>
-              <h4>{{card.getPrice()}},-</h4>
-              <p>/måned</p>
-              <div :key="s.id" v-for="s in card.getInfoSentence()">
-                <img v-if="isChosen(card.id)" id="check" src="../assets/icons/check_white.svg"/>
-                <img v-else id="check" src="../assets/icons/check_black.svg"/>
-                <div>{{s}}</div>
-              </div>
-          </b-card>
+        <BaseCard
+          v-for="card in cards"
+          :key="card.id"
+          :card="card"
+          :isChosen="isChosen(card.id)"
+          :setChosen="() => (chosenCard = card.id)"
+        >
+          <template #radiobutton>
+            <b-form-radio
+              name="radio-size"
+              v-model="chosenCard"
+              size="lg"
+              :value="card.id"
+            ></b-form-radio>
+          </template>
+        </BaseCard>
       </b-card-group>
     </div>
     <router-link to="/personalia">
-      <BaseButton classType="prim" text="Neste" v-on:BaseButton-clicked="membershipChosen()"/>
+      <BaseButton
+        classType="prim"
+        text="Neste"
+        v-on:BaseButton-clicked="membershipChosen()"
+      />
     </router-link>
-    <BaseInfoBox color="#F1F3FF" label="Frys gir deg mulighet til å sette abonnementet på vent, også i bindingsperioden."/>
+    <BaseInfoBox
+      color="#F1F3FF"
+      label="Frys gir deg mulighet til å sette abonnementet på vent, også i bindingsperioden."
+    />
   </div>
 </template>
 
@@ -35,7 +47,7 @@ export default {
     return {
       cards: [],
       chosenCard: 0,
-      contractsByInst: [],
+      contractsByInst: []
     };
   },
   created() {
@@ -48,11 +60,16 @@ export default {
       return cardid === this.chosenCard;
     },
     membershipChosen() {
-      this.$store.dispatch("saveChosenContractId", this.chosenCard);
+      console.log(this.cards);
+      let chosenCard = this.cards.find(e => e.id === this.chosenCard);
+      this.$store.dispatch("saveChosenCard", chosenCard);
+      console.log(this.$store.getters.getChosenCard);
     },
     getContracts(callback) {
       const Contracts = repo.get("contracts");
-      Contracts.getContractsByLearningInst(this.$store.getters.getSelectedLearningInst).then(response => {
+      Contracts.getContractsByLearningInst(
+        this.$store.getters.getSelectedLearningInst
+      ).then(response => {
         this.contractsByInst = response.data;
         callback();
       });
@@ -74,11 +91,11 @@ export default {
           element.lockInPeriod,
           lockInText,
           fee,
-          infoText,
+          infoText
         );
         this.cards.push(card);
       });
-      this.cards.sort((a, b) => a.id - b.id)
+      this.cards.sort((a, b) => a.id - b.id);
     }
   }
 };
@@ -91,19 +108,19 @@ export default {
 
 .card {
   max-width: 18rem;
-  border: 1px solid #FFB0A7;
+  border: 1px solid #ffb0a7;
   box-sizing: border-box;
   border-radius: 10px;
   background-color: transparent;
 }
 
 #check {
-  float:left;
+  float: left;
 }
 
 .active {
   max-width: 18rem;
-  background-color: #61177B !important;
+  background-color: #61177b !important;
   color: WHITE;
   box-sizing: border-box;
   border-radius: 10px;

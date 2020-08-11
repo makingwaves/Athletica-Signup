@@ -1,6 +1,6 @@
 <template>
-  <div class="baseInfoBox" :style="{'background-color': color}">
-    <img v-if="color === '#FFEF9E'" src="../assets/icons/info.svg"/>
+  <div class="baseInfoBox" :style="{ 'background-color': color }">
+    <img v-if="!hideIcon" src="../assets/icons/info.svg" />
     <p>{{ label }}</p>
     <slot name="content" />
   </div>
@@ -11,7 +11,8 @@ export default {
   name: "BaseInfoBox",
   props: {
     label: String,
-    color: String
+    color: String,
+    hideIcon: Boolean
   },
   components: {}
 };
@@ -19,7 +20,8 @@ export default {
 
 <style>
 .baseInfoBox {
-  display: inline-block;
+  display: flex;
+  flex-direction: row;
   max-width: 500px;
   padding: 12px 12px 4px 12px;
   border-radius: 7px;
@@ -28,5 +30,6 @@ export default {
 }
 .baseInfoBox img {
   float: left;
+  padding-right: 10px;
 }
 </style>
