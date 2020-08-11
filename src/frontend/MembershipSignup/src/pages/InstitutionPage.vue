@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <div>
     <BaseProgressBar :active="1" />
     <h5>Hvor studerer du?</h5>
@@ -22,25 +21,6 @@
           >{{ inst.name }}</b-form-select-option
         >
       </b-form-select>
-=======
-    <div>
-        <BaseProgressBar/>
-        <h5>Hvor studerer du?</h5>
-        <div class="learningInst">
-            <p class="p2">Velg ditt studiested</p>
-            <b-form-select id="learningInstDropDown" class="inputField" v-model="selected">
-                <template v-slot:first>
-                    <b-form-select-option :value="null" disabled>Velg utdanningsinstitusjon</b-form-select-option>
-                </template>
-                <b-form-select-option :value="inst" v-for="inst in learningInsts" v-bind:key="inst.name">{{inst.name}}</b-form-select-option>
-            </b-form-select>
-            <!-- <MembershipPage v-if="selected" :key="selected.id" :selected="selected"/> -->
-        </div>
-        <router-link to="/membership">
-            <BaseButton classType="prim" v-if="selected" :selected="selected" text="Neste"/>
-        </router-link>
-        <BaseInfoBox v-if="selected" color="#FFEF9E" label="Prisen varierer ut ifra støtten vi får fra de ulike studiestedene."/>
->>>>>>> f297a0586587d7e275c329c97be33ee98d543819
     </div>
     <router-link to="/membership">
       <BaseButton
@@ -92,12 +72,7 @@ export default {
 
 <style>
 .learningInst {
-<<<<<<< HEAD
   text-align: center;
   margin: 60px;
-=======
-    text-align: center;
-    margin: 60px;
->>>>>>> f297a0586587d7e275c329c97be33ee98d543819
 }
 </style>

@@ -12,7 +12,6 @@
 
 <script>
 export default {
-<<<<<<< HEAD
   name: "BaseProgressBar",
   props: ["active"],
   data() {
@@ -50,38 +49,6 @@ export default {
     };
   }
 };
-=======
-    name: "BaseProgressBar",
-    props: ['active'],
-    data() {
-        return {
-            progress: [
-                {
-                    step: 1,
-                    text: "Medlemskap",
-                    src: require("../assets/icons/1_active.svg")
-                },
-                {
-                    step: 2,
-                    text: "Personalia",
-                    src: require("../assets/icons/2_inactive.svg")
-                },
-                {
-                    step: 3,
-                    text: "Betaling",
-                    src: require("../assets/icons/3_inactive.svg")
-                },
-                {
-                    step: 4,
-                    text: "Kvittering",
-                    src: require("../assets/icons/4_inactive.svg")
-                },
-            ]
-        }
-    },
-
-}
->>>>>>> f297a0586587d7e275c329c97be33ee98d543819
 </script>
 
 <style>
