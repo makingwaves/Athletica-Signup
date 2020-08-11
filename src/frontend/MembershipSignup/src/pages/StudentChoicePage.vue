@@ -1,14 +1,30 @@
 <template>
   <div>
-    <BaseProgressBar/>  
+    <BaseProgressBar :active="1" />
     <div>
       <h5>Supert! Er du student?</h5>
       <div class="studentChoiceButtons">
-        <b-form-radio name="radio-size" v-model="isStudent" size="lg" value="true">Jeg er student</b-form-radio>
-        <b-form-radio name="radio-size" v-model="isStudent" size="lg" value="false">Jeg er ikke student</b-form-radio>
+        <b-form-radio
+          name="radio-size"
+          v-model="isStudent"
+          size="lg"
+          value="true"
+          >Jeg er student</b-form-radio
+        >
+        <b-form-radio
+          name="radio-size"
+          v-model="isStudent"
+          size="lg"
+          value="false"
+          >Jeg er ikke student</b-form-radio
+        >
       </div>
       <router-link to="/inst">
-        <BaseButton classType="prim" v-on:BaseButton-clicked="studentOrNot()" text="Neste" />
+        <BaseButton
+          classType="prim"
+          v-on:BaseButton-clicked="studentOrNot()"
+          text="Neste"
+        />
       </router-link>
       <BaseInfoBox
         color="#FFEF9E"
@@ -20,18 +36,18 @@
 
 <script>
 export default {
-    name: 'StudentChoicePage',
-    data() {
-        return {
-            isStudent: true,
-        }
-    },
-    methods: {
+  name: "StudentChoicePage",
+  data() {
+    return {
+      isStudent: true
+    };
+  },
+  methods: {
     studentOrNot() {
       this.$store.dispatch("saveStudentChoice", this.isStudent);
     }
   }
-}
+};
 </script>
 
 <style>

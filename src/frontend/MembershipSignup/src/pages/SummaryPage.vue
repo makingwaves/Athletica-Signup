@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BaseProgressBar />
+    <BaseProgressBar :active="3" />
     <h5>Klar for å betale?</h5>
     <div class="inputField">
       <h6>Du har valgt</h6>

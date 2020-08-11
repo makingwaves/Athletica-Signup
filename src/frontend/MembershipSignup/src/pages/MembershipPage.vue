@@ -1,6 +1,6 @@
 <template>
   <div class="createMembership">
-    <BaseProgressBar />
+    <BaseProgressBar :active="1" />
     <div class="membershipChoice">
       <h5>Hva passer deg best?</h5>
       <b-card-group deck class="cardDeck justify-content-center">

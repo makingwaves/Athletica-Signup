@@ -1,6 +1,6 @@
 <template>
   <div class="checkInput">
-    <BaseProgressBar />
+    <BaseProgressBar :active="2" />
     <h5>Hvem er du?</h5>
     <div class="inputField" v-bind:class="numberValidation">
       <b-form-group label="Fullt navn">
