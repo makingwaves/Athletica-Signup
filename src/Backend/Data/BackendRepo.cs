@@ -124,5 +124,10 @@ namespace Backend.Data
       IEnumerable<Membership> memberships = await _apiRetriever.GetAllMemberships();
       return memberships.FirstOrDefault(m => m.UserId == userId);
     }
+
+    public Task<bool> UpdateUser(User userToUpdate)
+    {
+      return _apiRetriever.UpdateUser(userToUpdate);
+    }
   }
 }

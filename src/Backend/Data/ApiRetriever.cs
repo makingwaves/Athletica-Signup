@@ -220,6 +220,22 @@ namespace Backend.Data
       return null;
     }
 
+    public async Task<bool> UpdateUser(User user)
+    {
+      var userUpdateDto = _mapper.Map<UserUpdateDto>(user);
+      var response = await client.PutAsJsonAsync($"{client.BaseAddress}/mock/users/{user.Id}", user);
+      try
+      {
+        response.EnsureSuccessStatusCode();
+        return true;
+      }
+      catch (HttpRequestException)
+      {
+        Console.WriteLine(response.StatusCode);
+      }
+      return false;
+    }
+
     public async Task<bool> PartialUserUpdate(int id, JsonPatchDocument<ClientDtos.UserUpdateDto> patchDoc)
     {
       var response = await client.PatchAsync($"{client.BaseAddress}/mock/users/{id}", new StringContent(JsonConvert.SerializeObject(patchDoc), Encoding.UTF8, "application/json-patch+json"));

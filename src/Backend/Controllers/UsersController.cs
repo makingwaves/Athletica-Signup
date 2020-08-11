@@ -4,6 +4,7 @@ using AutoMapper;
 using Backend.ClientDtos;
 using Backend.Data;
 using Backend.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -132,6 +133,23 @@ namespace Backend.Controllers
 
     }
 
+    [HttpPut("{id}")]
+    public async Task<ActionResult> UpdateUser(int id, UserUpdateDto userUpdateDto)
+    {
+      Response.Headers.Add("Access-Control-Allow-Origin", "*");
+      User userToUpdate = await _repository.GetUserById(id);
+      if (userToUpdate == null)
+      {
+        return NotFound();
+      }
+      _mapper.Map(userUpdateDto, userToUpdate);
+      if (!await _repository.UpdateUser(userToUpdate))
+      {
+        return StatusCode(StatusCodes.Status502BadGateway);
+      }
+      return NoContent();
+    }
+
     // PATCH api/signup/users/{id}
     [HttpPatch("{id}")]
     public async Task<ActionResult> PartialUserUpdate(int id, JsonPatchDocument<UserUpdateDto> patchDoc)
@@ -187,7 +205,22 @@ namespace Backend.Controllers
 
       return user;
     }
+    /*private async Task<User> MapToBrisUser(UserUpdateDto userUpdateDto)
+    {
+      BrisUser brisUser = await _repository.GetBrisUserBySsn(userUpdateDto.Ssn);
 
+      User user = _mapper.Map<User>(userUpdateDto);
+      string bdate = Helper.SsnToBirthDate(userUpdateDto.Ssn);
+      if (bdate == null)
+      {
+        ModelState.AddModelError(string.Empty, "Invalid social security number.");
+      }
+      user.BirthDate = bdate;
+      user.BrisId = brisUser?.Id;
+      user.LastPaidStudentFee = brisUser?.LastPaidStudentFee;
+
+      return user;
+    }*/
     private async Task<bool> CheckUserExistsValidationErrors(UserCreateDto userCreateDto)
     {
       async Task<bool> modelError(Func<User, string> userProp, Func<UserCreateDto, string> ucdProp, string propName)

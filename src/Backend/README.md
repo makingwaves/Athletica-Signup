@@ -30,7 +30,7 @@ Example response body:
     "id": 1002,
     "learningInstitutionId": null,
     "lockInPeriod": false,
-    "monthlyFeeNok": 500,
+    "monthlyFeeNok": 500
   }
 ]
 ```
@@ -162,6 +162,24 @@ Example request body:
   "ssn": "17051453158"
 }
 ```
+
+```http
+PUT api/signup/users/{id}
+```
+
+```json
+{
+  "firstName": "Ola",
+  "lastName": "Nordmann",
+  "learningInstitutionId": 1,
+  "email": "mariusgenser@norway.no",
+  "phoneNumber": "54321234",
+  "address": "Norgegata 47, 1905",
+  "ssn": "17051453158"
+}
+```
+
+Updates the user information in the database. Returns 204 No Content if successful.
 
 ```http
 PATCH api/signup/users/{id}

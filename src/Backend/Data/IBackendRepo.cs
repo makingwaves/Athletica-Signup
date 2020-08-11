@@ -35,5 +35,6 @@ namespace Backend.Data
     string GetCityByPostalCode(string postalCode);
 
     Task<Membership> GetMembershipByUserId(int userId);
+    Task<bool> UpdateUser(User userToUpdate);
   }
 }
