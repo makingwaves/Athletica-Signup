@@ -56,17 +56,28 @@
         <router-link to="inst"><u>medlemsavtalen</u></router-link> til SiO
         Athletica*
       </b-form-checkbox>
-
-      <h6>Betalingsmetode</h6>
-      <div>
-        <b-button-group>
-          <b-button variant="outline-dark" class="btn">Bankterminal</b-button>
-          <b-button variant="outline-dark" class="btn">Vipps</b-button>
-          <b-button variant="outline-dark" class="btn"
-            >Fyll inn kortinformasjon</b-button
-          >
-        </b-button-group>
-      </div>
+    </div>
+    <h6>Betalingsmetode</h6>
+    <div id="payment-method">
+      <b-button-group>
+        <b-button variant="outline-dark" class="btn" @click="selectPayment(1)">
+          <img src="../assets/icons/bankterminal.svg" />
+        </b-button>
+        <b-button variant="outline-dark" class="btn" @click="selectPayment(2)">
+          <img src="../assets/icons/vipps.svg" />
+        </b-button>
+        <b-button variant="outline-dark" class="btn" @click="selectPayment(3)">
+          <div>
+            <div style="float:left">
+              <img src="../assets/icons/visa.svg" />
+              <img src="../assets/icons/mastercard.svg" />
+            </div>
+            <div style="float:right">Bankkort</div>
+          </div>
+        </b-button>
+      </b-button-group>
+      <img v-if="payment === 1" src="../assets/icons/terminal_chosen.svg" />
+      <img v-if="payment === 3" src="../assets/icons/bankkort_chosen.svg" />
     </div>
   </div>
 </template>
@@ -79,6 +90,7 @@ export default {
       statusAG: "accepted",
       statusMA: null,
       card: null,
+      payment: null,
       avtaleGiroPros: [
         "Slipp 35,- i fakturagebyr hver måned",
         "Banken betaler regningen for deg"
@@ -89,6 +101,9 @@ export default {
     fetchChosenCard() {
       this.card = this.$store.getters.getChosenCard;
       console.log(this.card);
+    },
+    selectPayment(choice) {
+      this.payment = choice;
     }
   },
   created() {
@@ -122,7 +137,7 @@ export default {
 }
 .btn {
   margin: 10px;
-  width: 200px;
+  width: fit-content;
 }
 #avtale-check {
   float: left;
@@ -135,5 +150,10 @@ export default {
 }
 #ag-pros {
   background-color: #e8fdef;
+}
+#payment-method {
+  display: inline-flex;
+  flex-direction: column;
+  width: fit-content;
 }
 </style>
