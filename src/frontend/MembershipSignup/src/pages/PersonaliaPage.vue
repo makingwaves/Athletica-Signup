@@ -13,9 +13,9 @@
       <b-form-group class="short" label="Telefonnummer">
         <b-form-input
           id="phoneNumber"
-          placeholder="8 siffer"
+          placeholder="8 sifre"
           v-model="number"
-          :formatter="s => s.substring(0, 8)"
+          :formatter="numberFormatter(8)"
           @blur="saveNumber"
         ></b-form-input>
       </b-form-group>
@@ -36,7 +36,7 @@
 
     <PersonaliaNewUser
       class="inputField"
-      v-if="checkingUser === false && afterModal === true"
+      v-if="!checkingUser && afterModal === true"
     >
       <template #newuser>
         <b-form-group label="Gatenavn og nummer">
@@ -52,6 +52,7 @@
             id="postalCode"
             v-model="postal"
             @blur="postalValidation"
+            :formatter="numberFormatter(4)"
           ></b-form-input>
           <div style="float: right">{{ postalCity }}</div>
         </b-form-group>
@@ -72,7 +73,7 @@
             id="ssn"
             placeholder="11 siffer"
             v-model="ssn"
-            :formatter="s => s.substring(0, 11)"
+            :formatter="numberFormatter(11)"
             @blur="saveSsn"
           ></b-form-input>
         </b-form-group>
@@ -92,7 +93,9 @@
           />
           <BaseInfoBox
             v-if="
-              loadingFeeStatus === false && lastFeePaidThisSemester === null
+              ssn.length === 11 &&
+                loadingFeeStatus === false &&
+                lastFeePaidThisSemester === null
             "
             color="#FFEF9E"
             label="Det er ikke registrert i systemene våre om du har betalt semesteravgift. 
@@ -169,6 +172,7 @@ export default {
             this.afterModal = true;
             this.street = "";
             this.postal = "";
+            this.postalCity = "";
             this.email = "";
             this.ssn = "";
             setTimeout(() => {
@@ -372,6 +376,9 @@ export default {
       this.postal = addressSlots[1];
       this.postalCity = addressSlots[2];
       this.afterModal = true;
+    },
+    numberFormatter(length) {
+      return s => s.replace(/\D/g, "").substring(0, length);
     }
   },
   computed: {
@@ -401,6 +408,11 @@ export default {
       if (this.checkingUser === false && this.existingUser) {
         this.afterModal = false;
         this.showModal();
+      }
+    },
+    postal: function(val) {
+      if (this.postal.length === 4) {
+        this.postalValidation();
       }
     }
   }
