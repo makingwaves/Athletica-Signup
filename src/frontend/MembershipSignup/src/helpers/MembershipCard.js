@@ -4,11 +4,12 @@ export default class MembershipCard {
   price;
   infoSentence;
 
-  constructor(id, lockInText, price, infoSentence) {
+  constructor(id, lockInText, price, infoSentence, contractId) {
     this.id = id;
     this.lockInText = lockInText;
     this.price = price;
     this.infoSentence = infoSentence;
+    this.contractId = contractId;
   }
 
   getId() {
@@ -25,5 +26,9 @@ export default class MembershipCard {
 
   getInfoSentence() {
     return this.infoSentence;
+  }
+
+  getContractId() {
+    return this.contractId;
   }
 }

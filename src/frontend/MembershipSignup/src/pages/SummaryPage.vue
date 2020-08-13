@@ -23,10 +23,7 @@
           </p>
         </div>
       </div>
-      <BaseInfoBox
-        color="#FFEF9E"
-        label="Fremtidige betalinger trekkes i forkant av hver måned."
-      />
+      <BaseInfoBox color="#FFEF9E" label="Fremtidige betalinger trekkes i forkant av hver måned." />
       <h6>Opprett AvtaleGiro nå</h6>
       <div class="baseMarketingBox" id="ag-pros">
         <template>
@@ -42,9 +39,7 @@
         name="checkbox-1"
         value="accepted"
         unchecked-value="not_accepted"
-      >
-        Opprett AvtaleGiro
-      </b-form-checkbox>
+      >Opprett AvtaleGiro</b-form-checkbox>
       <b-form-checkbox
         id="checkbox-2"
         v-model="statusMA"
@@ -53,7 +48,10 @@
         unchecked-value="not_accepted"
       >
         Jeg godtar
-        <router-link to="inst"><u>medlemsavtalen</u></router-link> til SiO
+        <a>
+          <u>medlemsavtalen</u>
+        </a>
+        til
         Athletica*
       </b-form-checkbox>
     </div>
@@ -77,12 +75,20 @@
         </b-button>
       </b-button-group>
       <img v-if="payment === 1" src="../assets/icons/terminal_chosen.svg" />
-      <img v-if="payment === 3" src="../assets/icons/bankkort_chosen.svg" />
+      <router-link to="/end">
+        <img
+          v-if="payment === 3"
+          src="../assets/icons/bankkort_chosen.svg"
+          @click="postMembership()"
+        />
+      </router-link>
     </div>
   </div>
 </template>
 
 <script>
+import repo from "@/api/httpFactory";
+
 export default {
   name: "SummaryPage",
   data() {
@@ -93,8 +99,8 @@ export default {
       payment: null,
       avtaleGiroPros: [
         "Slipp 35,- i fakturagebyr hver måned",
-        "Banken betaler regningen for deg"
-      ]
+        "Banken betaler regningen for deg",
+      ],
     };
   },
   methods: {
@@ -104,13 +110,39 @@ export default {
     },
     selectPayment(choice) {
       this.payment = choice;
-    }
+    },
+    postMembership() {
+      const user = this.$store.getters.getUserData;
+      const contractId = this.$store.getters.getChosenCard.contractId;
+      const today = this.$store.getters.getToday;
+      const locationId = this.$store.getters.getLocationId;
+      console.log({
+        user: user.id,
+        contractId: contractId,
+        today: today,
+        locationId: locationId,
+      });
+      const Memberships = repo.get("memberships");
+
+      Memberships.postMembership(user.id, contractId, today, locationId)
+        .then((response) => {
+          try {
+            this.response = response.data;
+            console.log(this.response);
+          } catch (e) {}
+        })
+        .catch((error) => {
+          try {
+            console.log(error.response.data);
+          } catch (e) {}
+        });
+    },
   },
   created() {
     this.fetchChosenCard();
   },
   computed: {
-    remainingPrice: function() {
+    remainingPrice: function () {
       if (this.card !== null) {
         const today = new Date();
         const numberOfDays = new Date(
@@ -124,8 +156,8 @@ export default {
         );
       }
       return 0;
-    }
-  }
+    },
+  },
 };
 </script>
 

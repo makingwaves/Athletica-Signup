@@ -12,22 +12,13 @@
           :setChosen="() => (chosenCard = card.id)"
         >
           <template #radiobutton>
-            <b-form-radio
-              name="radio-size"
-              v-model="chosenCard"
-              size="lg"
-              :value="card.id"
-            ></b-form-radio>
+            <b-form-radio name="radio-size" v-model="chosenCard" size="lg" :value="card.id"></b-form-radio>
           </template>
         </BaseCard>
       </b-card-group>
     </div>
     <router-link to="/personalia">
-      <BaseButton
-        classType="prim"
-        text="Neste"
-        v-on:BaseButton-clicked="membershipChosen()"
-      />
+      <BaseButton classType="prim" text="Neste" v-on:BaseButton-clicked="membershipChosen()" />
     </router-link>
     <BaseInfoBox
       color="#F1F3FF"
@@ -47,7 +38,7 @@ export default {
     return {
       cards: [],
       chosenCard: 0,
-      contractsByInst: []
+      contractsByInst: [],
     };
   },
   created() {
@@ -61,7 +52,7 @@ export default {
     },
     membershipChosen() {
       console.log(this.cards);
-      let chosenCard = this.cards.find(e => e.id === this.chosenCard);
+      let chosenCard = this.cards.find((e) => e.id === this.chosenCard);
       this.$store.dispatch("saveChosenCard", chosenCard);
       console.log(this.$store.getters.getChosenCard);
     },
@@ -69,14 +60,14 @@ export default {
       const Contracts = repo.get("contracts");
       Contracts.getContractsByLearningInst(
         this.$store.getters.getSelectedLearningInst
-      ).then(response => {
+      ).then((response) => {
         this.contractsByInst = response.data;
         callback();
       });
     },
     createCardsFromContract() {
       this.cards = [];
-      this.contractsByInst.forEach(element => {
+      this.contractsByInst.forEach((element) => {
         const fee = element.monthlyFeeNok;
         let lockInText;
         let infoText;
@@ -91,13 +82,14 @@ export default {
           element.lockInPeriod,
           lockInText,
           fee,
-          infoText
+          infoText,
+          element.id
         );
         this.cards.push(card);
       });
       this.cards.sort((a, b) => a.id - b.id);
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -22,32 +22,32 @@ export default {
           text: "Medlemskap",
           src_active: require("../assets/icons/1_active.svg"),
           src_inactive: require("../assets/icons/1_inactive.svg"),
-          route: "/inst"
+          route: "/student",
         },
         {
           step: 2,
           text: "Personalia",
           src_active: require("../assets/icons/2_active.svg"),
           src_inactive: require("../assets/icons/2_inactive.svg"),
-          route: "/personalia"
+          route: "/personalia",
         },
         {
           step: 3,
           text: "Betaling",
           src_active: require("../assets/icons/3_active.svg"),
           src_inactive: require("../assets/icons/3_inactive.svg"),
-          route: "/summary"
+          route: "/summary",
         },
         {
           step: 4,
           text: "Kvittering",
           src_active: require("../assets/icons/4_active.svg"),
           src_inactive: require("../assets/icons/4_inactive.svg"),
-          route: "/end"
-        }
-      ]
+          route: "/end",
+        },
+      ],
     };
-  }
+  },
 };
 </script>
 

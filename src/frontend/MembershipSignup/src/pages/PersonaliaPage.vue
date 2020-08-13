@@ -4,11 +4,7 @@
     <h5>Hvem er du?</h5>
     <div class="inputField" v-bind:class="numberValidation">
       <b-form-group label="Fullt navn">
-        <b-form-input
-          id="fullName"
-          v-model="name"
-          @blur="nameValidation"
-        ></b-form-input>
+        <b-form-input id="fullName" v-model="name" @blur="nameValidation"></b-form-input>
       </b-form-group>
       <b-form-group class="short" label="Telefonnummer">
         <b-form-input
@@ -26,18 +22,11 @@
     </div>
     <PersonaliaUserExists v-if="existingUser">
       <template #hasuser>
-        <BaseModal
-          ref="login-modal"
-          :email="email"
-          :modalClosed="modalClosed"
-        />
+        <BaseModal ref="login-modal" :email="email" :modalClosed="modalClosed" />
       </template>
     </PersonaliaUserExists>
 
-    <PersonaliaNewUser
-      class="inputField"
-      v-if="!checkingUser && afterModal === true"
-    >
+    <PersonaliaNewUser class="inputField" v-if="!checkingUser && afterModal === true">
       <template #newuser>
         <b-form-group label="Gatenavn og nummer">
           <b-form-input
@@ -64,11 +53,7 @@
             @blur="emailValidation"
           ></b-form-input>
         </b-form-group>
-        <b-form-group
-          label="Fødselsnummer"
-          :class="ssnValidation"
-          v-if="existingUser === false"
-        >
+        <b-form-group label="Fødselsnummer" :class="ssnValidation" v-if="existingUser === false">
           <b-form-input
             id="ssn"
             placeholder="11 siffer"
@@ -81,9 +66,7 @@
         <div>
           <div class="offerBox" v-if="lastFeePaidThisSemester === true">
             <img src="../assets/icons/checkmark.svg" />
-            <p>
-              Flott! Du har betalt semesteravgift, og kan få studentpriser.
-            </p>
+            <p>Flott! Du har betalt semesteravgift, og kan få studentpriser.</p>
           </div>
           <BaseInfoBox
             v-if="lastFeePaidThisSemester === false"
@@ -103,11 +86,7 @@
           />
         </div>
         <router-link to="/summary">
-          <BaseButton
-            classType="prim"
-            v-on:BaseButton-clicked="createUser"
-            text="Neste"
-          />
+          <BaseButton classType="prim" v-on:BaseButton-clicked="createUser" text="Neste" />
         </router-link>
       </template>
     </PersonaliaNewUser>
@@ -138,12 +117,12 @@ export default {
       loading: false,
       checkingUser: null,
       afterModal: false,
-      loadingFeeStatus: null
+      loadingFeeStatus: null,
     };
   },
   components: {
     PersonaliaUserExists,
-    PersonaliaNewUser
+    PersonaliaNewUser,
   },
   methods: {
     showModal() {
@@ -153,7 +132,7 @@ export default {
       this.checkingUser = true;
       this.lastFeePaidThisSemester = null;
       UsersApi.getUserByNumber(userNum)
-        .then(response => {
+        .then((response) => {
           try {
             this.existingUser = response.data;
             console.log(response.data);
@@ -165,7 +144,7 @@ export default {
             }, 2000);
           } catch (e) {}
         })
-        .catch(error => {
+        .catch((error) => {
           try {
             console.log(error.response.data);
             this.existingUser = false;
@@ -184,7 +163,7 @@ export default {
     checkStudentFeeBySsn(ssn) {
       this.loadingFeeStatus = true;
       UsersApi.getStudentFeeBySsn(ssn)
-        .then(response => {
+        .then((response) => {
           try {
             var lastFeePaid = response.data.lastPaidStudentFee;
             // TODO: ADD LOADING WHEEL AND PAUSE SOMEWHERE HERE
@@ -197,7 +176,7 @@ export default {
             console.log(error.response.data);
           }
         })
-        .catch(error => {
+        .catch((error) => {
           try {
             this.loadingFeeStatus = false;
             console.log(error.response.data);
@@ -259,7 +238,7 @@ export default {
         console.log("Valid postal code");
         this.address = "";
         UsersApi.getCityByPostalCode(this.postal)
-          .then(response => {
+          .then((response) => {
             try {
               this.postalCity = response.data;
               this.address = this.address.concat(
@@ -271,7 +250,7 @@ export default {
               console.log(error.response.data);
             }
           })
-          .catch(error => {
+          .catch((error) => {
             try {
               console.log(error.response.data);
             } catch (e) {}
@@ -308,11 +287,13 @@ export default {
       this.$store.dispatch("saveTodaysDate", todayFormatted);
     },
     createUser() {
-      if (this.existingUser !== null) {
+      if (this.existingUser) {
         this.checkForUpdates();
         return;
       }
+      console.log("hallooooooo");
       var user = this.$store.getters.getUserData;
+      console.log(user);
       const Users = repo.get("users");
       Users.postUser(
         user.firstName,
@@ -323,14 +304,14 @@ export default {
         user.address,
         user.ssn
       )
-        .then(response => {
+        .then((response) => {
           try {
             this.response = response.data;
             console.log(this.response);
-            console.log("HELLOO");
+            this.$store.dispatch("saveUserId", this.response.id);
           } catch (e) {}
         })
-        .catch(error => {
+        .catch((error) => {
           try {
             console.log(error.response.data);
           } catch (e) {}
@@ -355,12 +336,12 @@ export default {
           user.address,
           user.ssn
         )
-          .then(response => {
+          .then((response) => {
             try {
               console.log(this.response);
             } catch (e) {}
           })
-          .catch(error => {
+          .catch((error) => {
             try {
               console.log(error.response.data);
             } catch (e) {}
@@ -378,11 +359,11 @@ export default {
       this.afterModal = true;
     },
     numberFormatter(length) {
-      return s => s.replace(/\D/g, "").substring(0, length);
-    }
+      return (s) => s.replace(/\D/g, "").substring(0, length);
+    },
   },
   computed: {
-    numberValidation: function() {
+    numberValidation: function () {
       if (this.number.length === 8) {
         console.log("Valid phone number");
         this.checkUserByNumber(this.number);
@@ -392,7 +373,7 @@ export default {
         return "invalid";
       }
     },
-    ssnValidation: function() {
+    ssnValidation: function () {
       if (this.ssn.length === 11) {
         console.log("Valid ssn");
         this.checkStudentFeeBySsn(this.ssn);
@@ -401,21 +382,21 @@ export default {
         console.log("Invalid ssn");
         return "invalid";
       }
-    }
+    },
   },
   watch: {
-    checkingUser: function(val) {
+    checkingUser: function (val) {
       if (this.checkingUser === false && this.existingUser) {
         this.afterModal = false;
         this.showModal();
       }
     },
-    postal: function(val) {
+    postal: function (val) {
       if (this.postal.length === 4) {
         this.postalValidation();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

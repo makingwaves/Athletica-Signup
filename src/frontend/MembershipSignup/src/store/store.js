@@ -8,6 +8,7 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
   state: {
     user: {
+      id: "",
       firstName: "",
       lastName: "",
       //Type: int - if null, person is not a student
@@ -18,9 +19,8 @@ export const store = new Vuex.Store({
       ssn: ""
     },
 
-    locationId: 1234,
     //Type: int
-    contractid: null,
+    locationId: 1234,
     //Type: String 8 siffer - DDMMYYYY
     today: "",
 
@@ -30,8 +30,11 @@ export const store = new Vuex.Store({
       id: null,
       lockInText: null,
       price: null,
-      infoSentence: null
-    }
+      infoSentence: null,
+      contractId: null
+    },
+
+    learningInsts: []
   },
   plugins: [
     createPersistedState({
@@ -49,6 +52,15 @@ export const store = new Vuex.Store({
     },
     getChosenCard: state => {
       return state.card;
+    },
+    getLearningInsts: state => {
+      return state.learningInsts;
+    },
+    getLocationId: state => {
+      return state.locationId;
+    },
+    getToday: state => {
+      return state.today;
     }
   },
   mutations: {
@@ -64,7 +76,7 @@ export const store = new Vuex.Store({
     SAVE_CHOSEN_CARD(state, card) {
       state.card = card;
     },
-    SAVE_ID(state, userId) {
+    SAVE_USER_ID(state, userId) {
       state.user.id = userId;
     },
     SAVE_FIRST_NAME(state, firstName) {
@@ -90,44 +102,77 @@ export const store = new Vuex.Store({
     },
     SAVE_EXISTING_USER(state, user) {
       state.user = user;
+    },
+    SAVE_LEARNING_INSTS(state, learningInsts) {
+      state.learningInsts = learningInsts;
     }
   },
   modules,
   actions: {
-    saveChosenLearningInst({ commit }, instId) {
+    saveChosenLearningInst({
+      commit
+    }, instId) {
       commit("SAVE_CHOSEN_LEARNINGINST", instId);
     },
-    saveStudentChoice({ commit }, isStudent) {
+    saveStudentChoice({
+      commit
+    }, isStudent) {
       commit("SAVE_STUDENT_CHOICE", isStudent);
     },
-    saveChosenContractId({ commit }, contractId) {
+    saveChosenContractId({
+      commit
+    }, contractId) {
       commit("SAVE_CHOSEN_CONTRACT_ID", contractId);
     },
-    saveChosenCard({ commit }, card) {
+    saveChosenCard({
+      commit
+    }, card) {
       commit("SAVE_CHOSEN_CARD", card);
     },
-    saveFirstName({ commit }, firstName) {
+    saveUserId({
+      commit
+    }, userId) {
+      commit("SAVE_USER_ID", userId);
+    },
+    saveFirstName({
+      commit
+    }, firstName) {
       commit("SAVE_FIRST_NAME", firstName);
     },
-    saveLastName({ commit }, lastName) {
+    saveLastName({
+      commit
+    }, lastName) {
       commit("SAVE_LAST_NAME", lastName);
     },
-    savePhoneNumber({ commit }, number) {
+    savePhoneNumber({
+      commit
+    }, number) {
       commit("SAVE_PHONE_NUMBER", number);
     },
-    saveAddress({ commit }, address) {
+    saveAddress({
+      commit
+    }, address) {
       commit("SAVE_ADDRESS", address);
     },
-    saveEmailAddress({ commit }, email) {
+    saveEmailAddress({
+      commit
+    }, email) {
       commit("SAVE_EMAIL_ADDRESS", email);
     },
-    saveSsn({ commit }, ssn) {
+    saveSsn({
+      commit
+    }, ssn) {
       commit("SAVE_SSN", ssn);
     },
-    saveTodaysDate({ commit }, date) {
+    saveTodaysDate({
+      commit
+    }, date) {
       commit("SAVE_TODAYS_DATE", date);
     },
-    saveUser({ commit }, user) {
+    saveUser({
+      commit
+    }, user) {
+      commit("SAVE_USER_ID", user.id)
       commit("SAVE_FIRST_NAME", user.firstName);
       commit("SAVE_LAST_NAME", user.lastName);
       commit("SAVE_EMAIL_ADDRESS", user.email);
@@ -135,6 +180,11 @@ export const store = new Vuex.Store({
       commit("SAVE_SSN", user.ssn);
       commit("SAVE_PHONE_NUMBER", user.phoneNumber);
       commit("SAVE_CHOSEN_LEARNINGINST", user.learningInstitutionId);
+    },
+    saveLearningInsts({
+      commit
+    }, learningInsts) {
+      commit("SAVE_LEARNING_INSTS", learningInsts);
     }
   }
 });
