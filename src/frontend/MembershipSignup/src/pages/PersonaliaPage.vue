@@ -20,76 +20,82 @@
         <p>Sjekker om du har SiO-bruker...</p>
       </div>
     </div>
-    <div v-if="existingUser">
-      <BaseModal ref="login-modal" :email="email" :modalClosed="modalClosed" />
-    </div>
+    <PersonaliaUserExists v-if="existingUser">
+      <template #hasuser>
+        <BaseModal ref="login-modal" :email="email" :modalClosed="modalClosed" />
+      </template>
+    </PersonaliaUserExists>
 
-    <div class="inputField" v-if="!checkingUser && afterModal === true">
-      <b-form-group label="Gatenavn og nummer">
-        <b-form-input
-          id="streetAddress"
-          placeholder="Eksempel: Gatenavn 24"
-          v-model="street"
-          @blur="streetValidation"
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group label="Postnummer">
-        <b-form-input
-          id="postalCode"
-          v-model="postal"
-          @blur="postalValidation"
-          :formatter="numberFormatter(4)"
-        ></b-form-input>
-        <div style="float: right">{{ postalCity }}</div>
-      </b-form-group>
-      <b-form-group label="E-post">
-        <b-form-input
-          id="emailAddress"
-          v-model="email"
-          :disabled="!!existingUser"
-          @blur="emailValidation"
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group label="Fødselsnummer" :class="ssnValidation" v-if="existingUser === false">
-        <b-form-input
-          id="ssn"
-          placeholder="11 siffer"
-          v-model="ssn"
-          :formatter="numberFormatter(11)"
-          @blur="saveSsn"
-        ></b-form-input>
-      </b-form-group>
-      <BaseInfoBox color="#FFEF9E" label="Sjekk at opplysningene stemmer." />
-      <div>
-        <div class="offerBox" v-if="lastFeePaidThisSemester === true">
-          <img src="../assets/icons/checkmark.svg" />
-          <p>Flott! Du har betalt semesteravgift, og kan få studentpriser.</p>
-        </div>
-        <BaseInfoBox
-          v-if="lastFeePaidThisSemester === false"
-          color="#FFB0A7"
-          label="Det ser ut som du ikke har betalt semesteravgiften. Husk å betale
+    <PersonaliaNewUser class="inputField" v-if="!checkingUser && afterModal === true">
+      <template #newuser>
+        <b-form-group label="Gatenavn og nummer">
+          <b-form-input
+            id="streetAddress"
+            placeholder="Eksempel: Gatenavn 24"
+            v-model="street"
+            @blur="streetValidation"
+          ></b-form-input>
+        </b-form-group>
+        <b-form-group label="Postnummer">
+          <b-form-input
+            id="postalCode"
+            v-model="postal"
+            @blur="postalValidation"
+            :formatter="numberFormatter(4)"
+          ></b-form-input>
+          <div style="float: right">{{ postalCity }}</div>
+        </b-form-group>
+        <b-form-group label="E-post">
+          <b-form-input
+            id="emailAddress"
+            v-model="email"
+            :disabled="!!existingUser"
+            @blur="emailValidation"
+          ></b-form-input>
+        </b-form-group>
+        <b-form-group label="Fødselsnummer" :class="ssnValidation" v-if="existingUser === false">
+          <b-form-input
+            id="ssn"
+            placeholder="11 siffer"
+            v-model="ssn"
+            :formatter="numberFormatter(11)"
+            @blur="saveSsn"
+          ></b-form-input>
+        </b-form-group>
+        <BaseInfoBox color="#FFEF9E" label="Sjekk at opplysningene stemmer." />
+        <div>
+          <div class="offerBox" v-if="lastFeePaidThisSemester === true">
+            <img src="../assets/icons/checkmark.svg" />
+            <p>Flott! Du har betalt semesteravgift, og kan få studentpriser.</p>
+          </div>
+          <BaseInfoBox
+            v-if="lastFeePaidThisSemester === false"
+            color="#FFB0A7"
+            label="Det ser ut som du ikke har betalt semesteravgiften. Husk å betale
           innen 15. september for å få studentpriser på medlemskapet ditt."
-        />
-        <BaseInfoBox
-          v-if="
+          />
+          <BaseInfoBox
+            v-if="
               ssn.length === 11 &&
                 loadingFeeStatus === false &&
                 lastFeePaidThisSemester === null
             "
-          color="#FFEF9E"
-          label="Det er ikke registrert i systemene våre om du har betalt semesteravgift. 
+            color="#FFEF9E"
+            label="Det er ikke registrert i systemene våre om du har betalt semesteravgift. 
             Husk at den må være betalt innen 15. september for at du skal få studentpriser på medlemskapet ditt."
-        />
-      </div>
-      <router-link to="/summary">
-        <BaseButton classType="prim" v-on:BaseButton-clicked="createUser" text="Neste" />
-      </router-link>
-    </div>
+          />
+        </div>
+        <router-link to="/summary">
+          <BaseButton classType="prim" v-on:BaseButton-clicked="createUser" text="Neste" />
+        </router-link>
+      </template>
+    </PersonaliaNewUser>
   </div>
 </template>
 
 <script>
+import PersonaliaUserExists from "@/components/PersonaliaUserExists.vue";
+import PersonaliaNewUser from "@/components/PersonaliaNewUser.vue";
 import store from "../store/store";
 import UsersApi from "@/api/users.api";
 import repo from "@/api/httpFactory";
