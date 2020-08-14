@@ -1,5 +1,5 @@
 # Signup system for SiO Athletica
-This is a proof of concept developed by the summer students of Making Waves in 2020 for SiO Athletica. It is meant to replace today's signup process at Athletica's gyms. The prototype can be accessed [here](https://athleticasignup.web.app)
+This is a proof of concept developed by the summer students of Making Waves in 2020 for SiO Athletica. It is meant to replace today's signup process at Athletica's gyms. The prototype can be accessed [here](https://athleticasignup.web.app).
 
 ## Table of contents
 - [Install project](#install-project)
