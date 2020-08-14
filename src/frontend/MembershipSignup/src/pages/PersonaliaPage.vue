@@ -233,6 +233,7 @@ export default {
         console.log("Invalid street");
       } else {
         console.log("Valid street");
+        this.postalValidation();
       }
     },
     postalValidation() {
@@ -351,6 +352,8 @@ export default {
               console.log(error.response.data);
             } catch (e) {}
           });
+      } else {
+        console.log("No updates made");
       }
     },
     modalClosed() {
