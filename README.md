@@ -11,12 +11,6 @@ This is a proof of concept developed by the summer students of Making Waves in 2
     
 
 # Install project
-Either follow these steps or run
-```bash
-./setup.sh
-```
-which completes these steps automatically.
-
 ## Prerequisites
 Install [Dotnet Core](https://dotnet.microsoft.com/download) if you don't already have it installed.
 
@@ -40,9 +34,13 @@ npm install npm@latest -g
 npm install --save-dev webpack
 ```
 
+## Steps
+Either follow these steps or run the setup script:
+```bash
+./setup.sh
+```
+which completes these steps automatically.
 
-## How to install locally
-[Install Dotnet Core](https://dotnet.microsoft.com/download) if you don't already have it installed.
 ### Create the Mock database
 1. Install [Docker Desktop](https://www.docker.com/get-started) if you don't already have it installed.
 2. Run the following command
