@@ -2,7 +2,7 @@
 echo "Creating Docker server.";
 echo "Enter a strong password for the Docker server:";
 read password;
-docker run -d --name MockServer -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=${password}' -p 1500:1433 mcr.microsoft.com/mssql/server:2019-latest;
+docker run -d --name MockServer -e 'ACCEPT_EULA=Y' -e "SA_PASSWORD=${password}" -p 1500:1433 mcr.microsoft.com/mssql/server:2019-latest;
 echo "Adding connection string to Mock project user secrets";
 pushd src/Mock;
 dotnet user-secrets set DefaultConnection "Server=localhost,1500;Initial Catalog=MockDB;User ID=sa;Password=${password}";

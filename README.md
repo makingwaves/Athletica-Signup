@@ -11,14 +11,29 @@ This is a proof of concept developed by the summer students of Making Waves in 2
     
 
 # Install project
+Either follow these steps or run
+```bash
+./setup.sh
+```
+which completes these steps automatically.
+
 ## Prerequisites
 Install [Dotnet Core](https://dotnet.microsoft.com/download) if you don't already have it installed.
+
+Install Dotnet EF:
+```bash
+dotnet tool install --global dotnet-ef
+```
+
 Install [Docker Desktop](https://www.docker.com/get-started) if you don't already have it installed.
+
 Install Homebrew:
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 ```
+
 Install **node** and **webpack**:
+
 ```bash
 brew install npm
 npm install npm@latest -g
@@ -42,13 +57,7 @@ To check that the server is up and running, run
 docker ps
 ```
 
-3. If running `dotnet ef` gives you a Not found error, run
-
-```bash
-dotnet tool install --global dotnet-ef
-```
-
-4. To set the connection string when testing locally, add a user secret:
+3. To set the connection string when testing locally, add a user secret:
 
 ```bash
 pushd src/Mock
@@ -62,7 +71,7 @@ Check that it worked:
 dotnet user-secrets list
 ```
 
-5. To create the database, run
+4. To create the database, run
 
 ```bash
 dotnet ef database update
